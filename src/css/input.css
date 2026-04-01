@@ -2,26 +2,240 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Utility Classes */
+/* ========================================
+   CUSTOM FONTS & TYPOGRAPHY
+   ======================================== */
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Press+Start+2P&display=swap');
+
+  body {
+    @apply font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black tracking-wider;
+  }
+}
+
+/* ========================================
+   CYBERPUNK COMPONENTS
+   ======================================== */
 @layer components {
-  /* Filter Buttons */
-  .filter-btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors;
-    @apply bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white;
-    @apply hover:bg-gray-200 dark:hover:bg-slate-700;
-    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400;
-    @apply active:bg-blue-600 dark:active:bg-blue-600 active:text-white;
+  /* Cyber Filter Buttons */
+  .cyber-filter-btn {
+    @apply px-4 py-2 rounded font-black text-sm tracking-widest;
+    @apply bg-white border-2 text-slate-900;
+    @apply transition-all duration-200 transform;
+    @apply hover:scale-110 active:scale-95;
+    @apply shadow-md hover:shadow-xl;
+
+    position: relative;
+    overflow: hidden;
   }
 
-  /* Card Component */
-  .card {
-    @apply bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700;
-    @apply p-6 shadow-sm hover:shadow-md transition-shadow;
+  .cyber-filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
   }
 
-  /* Skeleton Loader */
+  .cyber-filter-btn:hover::before {
+    left: 100%;
+  }
+
+  .cyber-filter-btn:nth-child(1) {
+    @apply border-cyan-500 text-cyan-600 hover:bg-cyan-50;
+  }
+
+  .cyber-filter-btn:nth-child(2) {
+    @apply border-magenta-500 text-magenta-600 hover:bg-magenta-50;
+  }
+
+  .cyber-filter-btn:nth-child(3) {
+    @apply border-lime-500 text-lime-600 hover:bg-lime-50;
+  }
+
+  .cyber-filter-btn:nth-child(4) {
+    @apply border-orange-500 text-orange-600 hover:bg-orange-50;
+  }
+
+  .cyber-filter-btn:nth-child(5) {
+    @apply border-purple-500 text-purple-600 hover:bg-purple-50;
+  }
+
+  .cyber-filter-btn:nth-child(6) {
+    @apply border-red-500 text-red-600 hover:bg-red-50;
+  }
+
+  /* Cyberpunk Cards */
+  .cyber-card {
+    @apply bg-white border-2 p-5 rounded-lg transition-all duration-300;
+    @apply hover:shadow-2xl hover:scale-105 hover:-translate-y-1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(0, 255, 255, 0.02) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    transition: left 0.6s;
+  }
+
+  .cyber-card:hover::before {
+    left: 100%;
+  }
+
+  /* Color variants for cards */
+  .cyber-card.news {
+    @apply border-magenta-400 hover:border-magenta-600;
+    color: #d946ef;
+  }
+
+  .cyber-card.github {
+    @apply border-lime-400 hover:border-lime-600;
+    color: #84cc16;
+  }
+
+  .cyber-card.hn {
+    @apply border-orange-400 hover:border-orange-600;
+    color: #f97316;
+  }
+
+  .cyber-card.ai {
+    @apply border-purple-400 hover:border-purple-600;
+    color: #a855f7;
+  }
+
+  .cyber-card.security {
+    @apply border-red-400 hover:border-red-600;
+    color: #ef4444;
+  }
+
+  .cyber-card.bookmark {
+    @apply border-yellow-400 hover:border-yellow-600;
+    color: #eab308;
+  }
+
+  .cyber-card.search {
+    @apply border-cyan-400 hover:border-cyan-600;
+    color: #06b6d4;
+  }
+
+  /* Card Title */
+  .cyber-card-title {
+    @apply text-lg font-black mb-3 line-clamp-2;
+  }
+
+  /* Card Description */
+  .cyber-card-desc {
+    @apply text-sm text-slate-700 line-clamp-3 mb-4;
+  }
+
+  /* Card Footer */
+  .cyber-card-footer {
+    @apply flex items-center justify-between pt-4 border-t border-slate-200;
+  }
+
+  /* Skeleton Loading */
   .skeleton {
-    @apply bg-gray-200 dark:bg-slate-700 rounded-lg animate-pulse;
+    @apply animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200;
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Glowing Text */
+  .glow-text {
+    @apply text-transparent bg-clip-text;
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 5px currentColor); }
+    50% { filter: drop-shadow(0 0 15px currentColor); }
+  }
+
+  /* Badge Styles */
+  .cyber-badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest;
+    @apply bg-white border-2 shadow-md;
+  }
+
+  .cyber-badge.cyan {
+    @apply border-cyan-400 text-cyan-600;
+  }
+
+  .cyber-badge.magenta {
+    @apply border-magenta-400 text-magenta-600;
+  }
+
+  .cyber-badge.lime {
+    @apply border-lime-400 text-lime-600;
+  }
+
+  /* Notification Styles */
+  .notification {
+    @apply fixed bottom-6 right-6 px-6 py-4 rounded-lg font-black tracking-wide;
+    @apply shadow-2xl z-50;
+    animation: slide-up 0.4s ease-out;
+  }
+
+  .notification.success {
+    @apply bg-lime-500 text-white border-2 border-lime-300;
+  }
+
+  .notification.error {
+    @apply bg-red-500 text-white border-2 border-red-300;
+  }
+
+  .notification.info {
+    @apply bg-cyan-500 text-white border-2 border-cyan-300;
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Icon Animations */
+  .icon-bounce {
+    animation: bounce-icon 0.6s ease-in-out infinite;
+  }
+
+  @keyframes bounce-icon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply inline-block w-6 h-6 border-4 border-slate-200 border-t-cyan-500 rounded-full;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
   /* Screen Reader Only */
@@ -30,49 +244,40 @@
   }
 }
 
-/* Smooth scroll behavior */
+/* ========================================
+   GLOBAL STYLES
+   ======================================== */
 html {
   scroll-behavior: smooth;
 }
 
-/* Transition utilities */
 * {
   @apply transition-colors duration-200;
 }
 
-/* Scrollbar styling for webkit browsers */
+/* Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  @apply w-3;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-slate-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  @apply bg-gradient-to-b from-cyan-400 to-magenta-400 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  @apply bg-gradient-to-b from-cyan-500 to-magenta-500;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Focus visible for accessibility */
+/* Focus Styles for Accessibility */
 :focus-visible {
-  @apply outline-none ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-slate-950 rounded;
+  @apply outline-none ring-2 ring-cyan-500 ring-offset-2 rounded;
 }
 
-/* Reduce motion for accessibility */
+/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -82,14 +287,7 @@ html {
   }
 }
 
-/* Dark mode transitions */
-@media (prefers-color-scheme: dark) {
-  body {
-    color-scheme: dark;
-  }
-}
-
-/* Print styles */
+/* Print Styles */
 @media print {
   nav, aside, footer {
     display: none !important;
@@ -98,4 +296,9 @@ html {
   main {
     padding: 0 !important;
   }
+
+  body {
+    @apply bg-white text-black;
+  }
 }
+

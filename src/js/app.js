@@ -124,10 +124,10 @@ function showSkeleton(containerId, count = 6) {
     .fill(0)
     .map(
       () => `
-    <div class="card animate-pulse">
-      <div class="skeleton h-6 w-3/4 mb-4"></div>
-      <div class="skeleton h-4 w-full mb-2"></div>
-      <div class="skeleton h-4 w-2/3"></div>
+    <div class="cyber-card skeleton">
+      <div class="h-6 w-3/4 mb-4 rounded"></div>
+      <div class="h-4 w-full mb-2 rounded"></div>
+      <div class="h-4 w-2/3 rounded"></div>
     </div>
   `
     )
@@ -137,9 +137,9 @@ function showSkeleton(containerId, count = 6) {
 }
 
 /**
- * Create card HTML
+ * Create card HTML with cyberpunk styling
  */
-function createCard(title, description, url, extra = '') {
+function createCard(title, description, url, extra = '', type = 'news') {
   if (!isValidURL(url)) {
     console.warn('Invalid URL:', url);
     return '';
@@ -152,33 +152,33 @@ function createCard(title, description, url, extra = '') {
   const encodedUrl = encodeURIComponent(url);
 
   return `
-    <article class="card group">
-      <h3 class="text-lg font-semibold mb-2 text-blue-600 dark:text-blue-400 line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+    <article class="cyber-card ${type}">
+      <h3 class="cyber-card-title text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700">
         ${safeTitle}
       </h3>
 
-      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+      <p class="cyber-card-desc">
         ${safeDescription}
       </p>
 
       ${extra}
 
-      <div class="flex gap-2 pt-4 border-t border-gray-200 dark:border-slate-700">
+      <div class="cyber-card-footer gap-3">
         <a
           href="${safeUrl}"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex-1 text-sm text-center py-2 rounded bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition"
+          class="flex-1 text-sm text-center py-2 px-3 rounded font-black tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-md"
           aria-label="Read article: ${safeTitle}">
-          Read →
+          VISIT →
         </a>
 
         <button
           onclick="saveBookmark('${encodedTitle}','${encodedUrl}')"
-          class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-medium transition"
+          class="px-4 py-2 rounded-lg font-black text-sm tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-yellow-300"
           aria-label="Save article: ${safeTitle}"
           title="Save to bookmarks">
-          ⭐
+          ⭐ SAVE
         </button>
       </div>
     </article>
@@ -193,9 +193,10 @@ function showError(containerId, message = 'Failed to load content') {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="col-span-full card bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-900">
-      <p class="text-red-700 dark:text-red-400 font-medium">⚠️ ${escapeHTML(message)}</p>
-      <p class="text-sm text-red-600 dark:text-red-300 mt-2">Please try again later or check your internet connection.</p>
+    <div class="col-span-full cyber-card security border-red-400 hover:border-red-600">
+      <p class="font-black text-red-700 mb-2">⚠️ ERROR</p>
+      <p class="text-red-600 font-semibold">${escapeHTML(message)}</p>
+      <p class="text-sm text-red-500 mt-2">Check your internet connection and try again.</p>
     </div>
   `;
 }
@@ -244,10 +245,11 @@ async function loadDevNews() {
           article.description,
           article.url,
           `<div class="flex gap-2 text-xs">
-          <span class="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded">
+          <span class="cyber-badge magenta">
             ${escapeHTML(article.tag_list?.[0] || 'General')}
           </span>
-        </div>`
+        </div>`,
+          'news'
         )
       )
       .join('');
@@ -283,7 +285,9 @@ const filterTech = debounce(async (tag) => {
         createCard(
           article.title,
           article.description,
-          article.url
+          article.url,
+          '',
+          'news'
         )
       )
       .join('');
@@ -324,16 +328,17 @@ async function loadGithubTrending() {
           repo.description || 'No description available',
           repo.html_url,
           `<div class="flex gap-2 text-xs">
-          <span class="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded">
+          <span class="cyber-badge lime">
             ⭐ ${(repo.stargazers_count || 0).toLocaleString()}
           </span>
-          <span class="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded">
+          <span class="cyber-badge lime">
             🍴 ${(repo.forks_count || 0).toLocaleString()}
           </span>
-          <span class="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded">
+          <span class="cyber-badge lime">
             ${escapeHTML(repo.language || 'Unknown')}
           </span>
-        </div>`
+        </div>`,
+          'github'
         )
       )
       .join('');
@@ -366,7 +371,9 @@ const searchFramework = debounce(async (framework) => {
         createCard(
           repo.name,
           repo.description || 'No description',
-          repo.html_url
+          repo.html_url,
+          '',
+          'github'
         )
       )
       .join('');
@@ -417,7 +424,9 @@ async function loadHackerNews() {
         return createCard(
           story.title,
           `👤 ${escapeHTML(story.by || 'Anonymous')} | ⭐ ${(story.score || 0).toLocaleString()}`,
-          story.url || `https://news.ycombinator.com/item?id=${story.id}`
+          story.url || `https://news.ycombinator.com/item?id=${story.id}`,
+          '',
+          'hn'
         );
       })
       .join('');
@@ -456,9 +465,10 @@ async function loadAINews() {
           article.title,
           article.description,
           article.url,
-          `<div class="text-xs text-gray-500 dark:text-gray-400">
+          `<div class="text-xs text-slate-600 font-semibold">
           👤 ${escapeHTML(article.user?.name || 'Anonymous')}
-        </div>`
+        </div>`,
+          'ai'
         )
       )
       .join('');
@@ -496,7 +506,9 @@ async function loadSecurityNews() {
         createCard(
           article.title,
           article.description,
-          article.url
+          article.url,
+          '',
+          'security'
         )
       )
       .join('');
@@ -540,7 +552,9 @@ const searchTech = debounce(async () => {
         createCard(
           article.title,
           article.description,
-          article.url
+          article.url,
+          '',
+          'search'
         )
       )
       .join('');
@@ -625,7 +639,7 @@ function loadBookmarks() {
 
     const html = bookmarks
       .map((b) =>
-        createCard(b.title, `Saved ${new Date(b.savedAt || 0).toLocaleDateString()}`, b.url)
+        createCard(b.title, `Saved ${new Date(b.savedAt || 0).toLocaleDateString()}`, b.url, '', 'bookmark')
       )
       .join('');
 
@@ -651,22 +665,22 @@ function loadAnalytics() {
     );
 
     const html = `
-      <div class="card">
-        <h3 class="font-semibold text-lg mb-2">⭐ Saved Articles</h3>
-        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${bookmarks.length}</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total bookmarked</p>
+      <div class="cyber-card bookmark">
+        <h3 class="cyber-card-title text-yellow-600">⭐ SAVED</h3>
+        <p class="text-4xl font-black text-yellow-600 my-3">${bookmarks.length}</p>
+        <p class="text-sm text-slate-700 font-semibold">Bookmarked articles</p>
       </div>
 
-      <div class="card">
-        <h3 class="font-semibold text-lg mb-2">💾 Cached Data</h3>
-        <p class="text-3xl font-bold text-green-600 dark:text-green-400">${cacheKeys.length}</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Active caches</p>
+      <div class="cyber-card search">
+        <h3 class="cyber-card-title text-cyan-600">💾 CACHED</h3>
+        <p class="text-4xl font-black text-cyan-600 my-3">${cacheKeys.length}</p>
+        <p class="text-sm text-slate-700 font-semibold">Active caches</p>
       </div>
 
-      <div class="card">
-        <h3 class="font-semibold text-lg mb-2">📊 Active Feeds</h3>
-        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">6</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">News sources</p>
+      <div class="cyber-card ai">
+        <h3 class="cyber-card-title text-purple-600">📊 FEEDS</h3>
+        <p class="text-4xl font-black text-purple-600 my-3">6</p>
+        <p class="text-sm text-slate-700 font-semibold">News sources</p>
       </div>
     `;
 
@@ -683,29 +697,21 @@ function loadAnalytics() {
 
 const themeToggle = document.getElementById('themeToggle');
 
-function applyTheme(theme) {
-  if (theme === 'light') {
-    document.documentElement.classList.remove('dark');
-    if (themeToggle) themeToggle.textContent = '🌙 Theme';
-  } else {
-    document.documentElement.classList.add('dark');
-    if (themeToggle) themeToggle.textContent = '☀️ Theme';
-  }
-
-  localStorage.setItem('devintelTheme', theme);
+function applyTheme() {
+  document.documentElement.classList.remove('dark');
+  if (themeToggle) themeToggle.textContent = '💡 LIGHT MODE';
+  localStorage.setItem('devintelTheme', 'light');
 }
 
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
-    const current = localStorage.getItem('devintelTheme') || 'dark';
-    const newTheme = current === 'dark' ? 'light' : 'dark';
-    applyTheme(newTheme);
+    applyTheme();
+    showNotification('Light mode active!');
   });
 }
 
-// Initialize theme
-const savedTheme = localStorage.getItem('devintelTheme') || 'dark';
-applyTheme(savedTheme);
+// Initialize theme to light
+applyTheme();
 
 // ============================================
 // NOTIFICATION
@@ -713,20 +719,24 @@ applyTheme(savedTheme);
 
 function showNotification(message, type = 'success') {
   const notification = document.createElement('div');
-  const bgColor =
+  const typeClass =
     type === 'success'
-      ? 'bg-green-600'
+      ? 'notification success'
       : type === 'error'
-        ? 'bg-red-600'
-        : 'bg-blue-600';
+        ? 'notification error'
+        : 'notification info';
 
-  notification.className = `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-sm animate-bounce`;
+  notification.className = typeClass;
   notification.textContent = message;
+  notification.style.animation = 'slide-up 0.4s ease-out';
 
   document.body.appendChild(notification);
 
   setTimeout(() => {
-    notification.remove();
+    notification.style.animation = 'none';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease-out';
+    setTimeout(() => notification.remove(), 300);
   }, 3000);
 }
 

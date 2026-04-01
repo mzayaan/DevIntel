@@ -422,6 +422,17 @@ video {
   display: none;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Press+Start+2P&display=swap');
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -516,23 +527,95 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-/* Filter Buttons */
+/* Cyber Filter Buttons */
 
-/* Card Component */
+/* Cyberpunk Cards */
 
-/* Skeleton Loader */
+/* Color variants for cards */
+
+/* Card Title */
+
+/* Card Description */
+
+/* Card Footer */
+
+/* Skeleton Loading */
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Glowing Text */
+
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px currentColor);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 15px currentColor);
+  }
+}
+
+/* Badge Styles */
+
+/* Notification Styles */
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Icon Animations */
+
+@keyframes bounce-icon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Loading Spinner */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Screen Reader Only */
 
-/* Utility Classes */
+/* ========================================
+   CUSTOM FONTS & TYPOGRAPHY
+   ======================================== */
 
-/* Smooth scroll behavior */
+/* ========================================
+   CYBERPUNK COMPONENTS
+   ======================================== */
+
+/* ========================================
+   GLOBAL STYLES
+   ======================================== */
 
 html {
   scroll-behavior: smooth;
 }
-
-/* Transition utilities */
 
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -540,35 +623,39 @@ html {
   transition-duration: 200ms;
 }
 
-/* Scrollbar styling for webkit browsers */
+/* Scrollbar Styling */
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 0.75rem;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 9999px;
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  --tw-gradient-from: #22d3ee var(--tw-gradient-from-position);
+  --tw-gradient-from-position:  ;
+  --tw-gradient-to: rgb(34 211 238 / 0)  var(--tw-gradient-from-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #f472b6 var(--tw-gradient-to-position);
+  --tw-gradient-to-position:  ;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  --tw-gradient-from: #06b6d4 var(--tw-gradient-from-position);
+  --tw-gradient-from-position:  ;
+  --tw-gradient-to: rgb(6 182 212 / 0)  var(--tw-gradient-from-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #ec4899 var(--tw-gradient-to-position);
+  --tw-gradient-to-position:  ;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Focus visible for accessibility */
+/* Focus Styles for Accessibility */
 
 :focus-visible {
   border-radius: 0.25rem;
@@ -578,17 +665,11 @@ html {
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(6 182 212 / var(--tw-ring-opacity));
   --tw-ring-offset-width: 2px;
 }
 
-:is(.dark :focus-visible) {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(96 165 250 / var(--tw-ring-opacity));
-  --tw-ring-offset-color: #020617;
-}
-
-/* Reduce motion for accessibility */
+/* Reduced Motion Support */
 
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -599,15 +680,7 @@ html {
   }
 }
 
-/* Dark mode transitions */
-
-@media (prefers-color-scheme: dark) {
-  body {
-    color-scheme: dark;
-  }
-}
-
-/* Print styles */
+/* Print Styles */
 
 @media print {
   nav, aside, footer {
@@ -617,4 +690,12 @@ html {
   main {
     padding: 0 !important;
   }
+
+  body {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(0 0 0 / var(--tw-text-opacity));
+  }
 }
+
