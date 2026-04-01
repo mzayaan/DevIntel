@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Utility Classes */
+@layer components {
+  /* Filter Buttons */
+  .filter-btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+    @apply bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white;
+    @apply hover:bg-gray-200 dark:hover:bg-slate-700;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400;
+    @apply active:bg-blue-600 dark:active:bg-blue-600 active:text-white;
+  }
+
+  /* Card Component */
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700;
+    @apply p-6 shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  /* Skeleton Loader */
+  .skeleton {
+    @apply bg-gray-200 dark:bg-slate-700 rounded-lg animate-pulse;
+  }
+
+  /* Screen Reader Only */
+  .sr-only {
+    @apply absolute w-1 h-1 p-0 -m-1 overflow-hidden clip-rect-0 border-0;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Transition utilities */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-slate-950 rounded;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark mode transitions */
+@media (prefers-color-scheme: dark) {
+  body {
+    color-scheme: dark;
+  }
+}
+
+/* Print styles */
+@media print {
+  nav, aside, footer {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+}
