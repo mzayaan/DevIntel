@@ -65,7 +65,10 @@ function applyTheme(theme) {
   const isDark = theme === 'dark';
   document.documentElement.classList.toggle('dark', isDark);
   if (themeToggle) {
-    themeToggle.textContent = isDark ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+    const icon = themeToggle.querySelector('.flex-shrink-0');
+    const label = themeToggle.querySelector('.sidebar-label');
+    if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+    if (label) label.textContent = isDark ? 'LIGHT MODE' : 'DARK MODE';
     themeToggle.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
   }
   localStorage.setItem('devintelTheme', theme);
