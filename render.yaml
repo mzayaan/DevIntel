@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: devintel
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GITHUB_TOKEN
+        sync: false   # set this manually in Render dashboard for 5000 req/hr
