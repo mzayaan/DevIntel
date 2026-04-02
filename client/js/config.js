@@ -7,6 +7,7 @@ const CONFIG = {
   // Override to 'http://localhost:3000' if running client separately from server
   API_BASE: '',
 
+  CACHE_VERSION: 'v2', // bump this whenever the server API response shape changes
   API_TIMEOUT: 8000,
   CACHE_DURATION: 600000, // 10 minutes (client-side localStorage TTL)
   AUTO_REFRESH_INTERVAL: 1800000, // 30 minutes

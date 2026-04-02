@@ -65,7 +65,7 @@ async function loadDevNews() {
 
   try {
     const articles = await fetchWithCache(
-      'devNews',
+      CONFIG.CACHE_VERSION + '_devNews',
       CONFIG.API_BASE + '/api/news?tag=programming&per_page=12'
     );
 
@@ -120,7 +120,7 @@ async function loadGithubTrending() {
 
   try {
     const data = await fetchWithCache(
-      'githubTrending',
+      CONFIG.CACHE_VERSION + '_githubTrending',
       CONFIG.API_BASE + '/api/github?q=stars:>5000&sort=stars&order=desc&per_page=9'
     );
 
@@ -173,7 +173,7 @@ async function loadHackerNews() {
   updateRefreshTime();
 
   try {
-    const ids = await fetchWithCache('hnTop', CONFIG.API_BASE + '/api/hn/top');
+    const ids = await fetchWithCache(CONFIG.CACHE_VERSION + '_hnTop', CONFIG.API_BASE + '/api/hn/top');
 
     if (!Array.isArray(ids)) throw new Error('Invalid API response');
 
@@ -212,7 +212,7 @@ async function loadAINews() {
 
   try {
     const articles = await fetchWithCache(
-      'aiNews',
+      CONFIG.CACHE_VERSION + '_aiNews',
       CONFIG.API_BASE + '/api/news?tag=ai&per_page=9'
     );
 
@@ -242,7 +242,7 @@ async function loadSecurityNews() {
 
   try {
     const articles = await fetchWithCache(
-      'securityNews',
+      CONFIG.CACHE_VERSION + '_securityNews',
       CONFIG.API_BASE + '/api/news?tag=security&per_page=9'
     );
 

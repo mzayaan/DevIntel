@@ -131,7 +131,7 @@ function loadAnalytics() {
   try {
     const bookmarks = JSON.parse(localStorage.getItem('devintelBookmarks')) || [];
     const cacheKeys = Object.keys(localStorage).filter(function(k) {
-      return k === 'devNews' || k === 'githubTrending' || k === 'hnTop' || k === 'aiNews' || k === 'securityNews';
+      return k.startsWith(CONFIG.CACHE_VERSION + '_');
     });
 
     container.innerHTML =
