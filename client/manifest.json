@@ -1,0 +1,61 @@
+{
+  "name": "DevIntel - Developer News Aggregator",
+  "short_name": "DevIntel",
+  "description": "Your personal developer news aggregator with trending repositories, AI news, and security updates",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#06b6d4",
+  "categories": ["productivity", "news"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Tech",
+      "short_name": "Search",
+      "description": "Search for technology articles",
+      "url": "/?shortcut=search",
+      "icons": [
+        {
+          "src": "icons/search-icon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Bookmarks",
+      "short_name": "Bookmarks",
+      "description": "View your saved articles",
+      "url": "/?shortcut=bookmarks",
+      "icons": [
+        {
+          "src": "icons/bookmark-icon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

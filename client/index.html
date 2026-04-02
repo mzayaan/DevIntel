@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevIntel - Developer news aggregator with trending repositories, tech articles, and curated content">
+  <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="DevIntel - Developer News Aggregator">
+  <meta property="og:description" content="Stay updated with the latest developer news, AI articles, GitHub trending repos, and security updates">
+  <meta property="og:type" content="website">
+
+  <title>DevIntel - Cyberpunk Intelligence Hub</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f172a'/><rect x='10' y='10' width='35' height='35' fill='%2306b6d4'/><rect x='30' y='30' width='40' height='40' fill='%23ec4899'/><rect x='55' y='55' width='35' height='35' fill='%2384cc16'/></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:bg-slate-900 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-slate-900 dark:text-slate-100 font-sans overflow-x-hidden"
+  style="background-attachment: fixed;">
+
+  <!-- SKIP TO CONTENT LINK -->
+  <a href="#mainContent" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:p-4 focus:bg-cyan-500 focus:text-white focus:rounded">
+    Skip to main content
+  </a>
+
+  <!-- FLOATING GRID BACKGROUND -->
+  <div class="fixed inset-0 opacity-5 pointer-events-none" style="background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 0, 255, 0.1) 25%, rgba(255, 0, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(255, 0, 255, 0.1) 75%, rgba(255, 0, 255, 0.1) 76%, transparent 77%, transparent); background-size: 80px 80px;"></div>
+
+  <!-- NAVIGATION BAR (Mobile) -->
+  <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b-4 border-cyan-500 z-50 md:hidden shadow-xl">
+    <div class="flex items-center justify-between p-4">
+      <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500">⬛ DEVINTEL</h1>
+      <button
+        id="menuToggle"
+        class="p-2 hover:bg-cyan-100 dark:hover:bg-slate-700 rounded transition transform hover:scale-110 active:scale-95"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="sidebar">
+        <svg class="w-6 h-6 text-magenta-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- OVERLAY (Mobile) -->
+  <div id="overlay" class="fixed inset-0 bg-black/60 hidden z-30 md:hidden transition-opacity backdrop-blur-sm"
+    aria-hidden="true"></div>
+
+  <!-- LAYOUT CONTAINER -->
+  <div class="flex min-h-screen pt-16 md:pt-0">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="fixed md:static top-0 left-0 w-72 h-screen bg-white/98 dark:bg-slate-800/98 backdrop-blur-xl border-r-4 border-magenta-500 p-6 z-40 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto shadow-2xl"
+      aria-label="Navigation">
+
+      <div class="hidden md:block mb-8">
+        <h1 class="text-3xl font-black tracking-widest bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500 bg-clip-text text-transparent">⬛ DEVINTEL</h1>
+        <div class="h-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-lime-400 mt-2"></div>
+      </div>
+
+      <!-- NAVIGATION MENU -->
+      <nav class="space-y-2 mb-8">
+        <a href="#searchSection" class="block px-4 py-3 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-cyan-500 hover:pl-3" onclick="closeMobileMenu()">
+          🔎 Search Tech
+        </a>
+        <a href="#newsSection" class="block px-4 py-3 rounded-lg hover:bg-magenta-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-magenta-500 hover:pl-3" onclick="closeMobileMenu()">
+          📰 Dev News
+        </a>
+        <a href="#githubSection" class="block px-4 py-3 rounded-lg hover:bg-lime-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-lime-500 hover:pl-3" onclick="closeMobileMenu()">
+          🐙 GitHub Trending
+        </a>
+        <a href="#hnSection" class="block px-4 py-3 rounded-lg hover:bg-orange-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-orange-500 hover:pl-3" onclick="closeMobileMenu()">
+          💬 Hacker News
+        </a>
+        <a href="#aiSection" class="block px-4 py-3 rounded-lg hover:bg-purple-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-purple-500 hover:pl-3" onclick="closeMobileMenu()">
+          🤖 AI & ML
+        </a>
+        <a href="#securitySection" class="block px-4 py-3 rounded-lg hover:bg-red-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-red-500 hover:pl-3" onclick="closeMobileMenu()">
+          🔐 Security
+        </a>
+        <a href="#bookmarksSection" class="block px-4 py-3 rounded-lg hover:bg-yellow-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-yellow-500 hover:pl-3" onclick="closeMobileMenu()">
+          ⭐ Bookmarks
+        </a>
+        <a href="#analyticsSection" class="block px-4 py-3 rounded-lg hover:bg-blue-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-blue-500 hover:pl-3" onclick="closeMobileMenu()">
+          📊 Analytics
+        </a>
+      </nav>
+
+      <!-- DIVIDER -->
+      <div class="h-1 bg-gradient-to-r from-cyan-400 to-magenta-400 my-6 rounded-full"></div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="space-y-3">
+        <button
+          id="themeToggle"
+          class="w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300"
+          aria-label="Toggle between light and dark theme">
+          🌙 DARK MODE
+        </button>
+
+        <button
+          id="installBtn"
+          class="hidden w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-magenta-400 to-magenta-500 hover:from-magenta-500 hover:to-magenta-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-magenta-300"
+          aria-label="Install application">
+          📱 INSTALL APP
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="mainContent" class="flex-1 overflow-y-auto min-w-0">
+
+      <!-- PAGE HEADER -->
+      <header class="bg-gradient-to-r from-slate-50 via-cyan-50 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b-4 border-cyan-500 sticky top-0 z-20 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-4 md:py-6">
+          <div class="flex items-center gap-4 mb-1">
+            <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-cyan-500 via-magenta-500 to-lime-400 rounded-lg transform -rotate-45 flex-shrink-0"></div>
+            <h1 class="text-2xl md:text-4xl font-black tracking-wider bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-600 bg-clip-text text-transparent">DEVINTEL</h1>
+          </div>
+          <p class="text-slate-700 dark:text-slate-300 font-semibold text-sm md:text-base">🎮 CYBERPUNK INTELLIGENCE HUB | STAY AHEAD OF THE CODE</p>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="max-w-7xl mx-auto px-4 py-6 md:py-10 space-y-12 md:space-y-16">
+
+        <!-- SEARCH SECTION -->
+        <section id="searchSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-cyan-500 mb-2">🔎 SEARCH TECHNOLOGIES</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Find articles and repositories across the tech universe</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 mb-8">
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="React, AI, Docker, Kubernetes..."
+              class="flex-1 px-4 py-3 md:py-4 rounded-lg bg-white dark:bg-slate-700 border-2 border-cyan-300 dark:border-cyan-700 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:focus:ring-cyan-800 font-semibold text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 transition shadow-md hover:shadow-lg hover:border-cyan-400 text-base"
+              aria-label="Search technologies">
+
+            <button
+              onclick="searchTech()"
+              class="px-6 md:px-8 py-3 md:py-4 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white font-black tracking-wide transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300 whitespace-nowrap text-sm md:text-base">
+              SEARCH
+            </button>
+          </div>
+
+          <div id="searchResults" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- DEV NEWS SECTION -->
+        <section id="newsSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-magenta-600 to-magenta-500 mb-2">📰 DEVELOPER NEWS</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-magenta-400 to-magenta-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Latest insights from the Dev.to ecosystem</p>
+          </div>
+
+          <div class="mb-6 flex flex-wrap gap-2">
+            <button onclick="filterTech('all')" class="cyber-filter-btn" aria-label="Show all news">ALL</button>
+            <button onclick="filterTech('javascript')" class="cyber-filter-btn" aria-label="Filter by JavaScript">JAVASCRIPT</button>
+            <button onclick="filterTech('python')" class="cyber-filter-btn" aria-label="Filter by Python">PYTHON</button>
+            <button onclick="filterTech('ai')" class="cyber-filter-btn" aria-label="Filter by AI">AI/ML</button>
+            <button onclick="filterTech('security')" class="cyber-filter-btn" aria-label="Filter by Security">SECURITY</button>
+            <button onclick="filterTech('devops')" class="cyber-filter-btn" aria-label="Filter by DevOps">DEVOPS</button>
+          </div>
+
+          <div id="newsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- GITHUB SECTION -->
+        <section id="githubSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-lime-600 to-lime-500 mb-2">🐙 GITHUB TRENDING</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-lime-400 to-lime-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Most starred repositories in real-time</p>
+          </div>
+
+          <div class="mb-6 flex flex-wrap gap-2">
+            <button onclick="searchFramework('react')" class="cyber-filter-btn" aria-label="Filter by React">REACT</button>
+            <button onclick="searchFramework('vue')" class="cyber-filter-btn" aria-label="Filter by Vue">VUE</button>
+            <button onclick="searchFramework('angular')" class="cyber-filter-btn" aria-label="Filter by Angular">ANGULAR</button>
+            <button onclick="searchFramework('tensorflow')" class="cyber-filter-btn" aria-label="Filter by TensorFlow">TENSORFLOW</button>
+          </div>
+
+          <div id="githubContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- HACKER NEWS SECTION -->
+        <section id="hnSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 mb-2">💬 HACKER NEWS PULSE</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Top stories from the developer community</p>
+          </div>
+          <div id="hnContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- AI NEWS SECTION -->
+        <section id="aiSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-500 mb-2">🤖 AI & MACHINE LEARNING</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">AI/ML breakthroughs and innovations</p>
+          </div>
+          <div id="aiContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- SECURITY SECTION -->
+        <section id="securitySection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500 mb-2">🔐 SECURITY & PRIVACY</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-red-400 to-red-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Critical security updates and threat intelligence</p>
+          </div>
+          <div id="securityContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- BOOKMARKS SECTION -->
+        <section id="bookmarksSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-yellow-500 mb-2">⭐ SAVED ARTICLES</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Your personal intelligence collection</p>
+          </div>
+          <div id="bookmarkContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- ANALYTICS SECTION -->
+        <section id="analyticsSection" class="scroll-mt-20">
+          <div class="mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-500 mb-2">📊 INTELLIGENCE ANALYTICS</h2>
+            <div class="h-1 w-32 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Your DevIntel usage metrics and insights</p>
+          </div>
+          <div id="analyticsContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6"></div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="border-t-4 border-cyan-400 py-8 md:py-10 mt-12 md:mt-20">
+          <div class="text-center space-y-3">
+            <p class="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-600 text-lg">⬛ DEVINTEL CYBERPUNK HUB ⬛</p>
+            <p class="text-slate-700 dark:text-slate-400 font-semibold">Built for developers who live on the bleeding edge</p>
+            <p class="text-slate-600 dark:text-slate-500 text-sm">Last sync: <span id="updateTime" class="font-mono text-cyan-600 dark:text-cyan-400">Just now</span></p>
+          </div>
+        </footer>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- APPLICATION SCRIPTS (load order matters — no bundler) -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js" defer></script>
+
+</body>
+
+</html>
