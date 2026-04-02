@@ -47,10 +47,7 @@ router.get('/', async (req, res, next) => {
     }
 
     const data = await upstream.json();
-    const result = { data, cachedAt: new Date().toISOString(), source: 'devto' };
-    cache.set(cacheKey, result, TTL_NEWS);
-
-    // Return the array directly for backwards-compat with client fetchWithCache
+    cache.set(cacheKey, data, TTL_NEWS);
     res.json(data);
   } catch (err) {
     if (err.name === 'AbortError') {
