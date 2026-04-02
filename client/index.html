@@ -59,39 +59,48 @@
     <!-- SIDEBAR -->
     <aside
       id="sidebar"
-      class="fixed md:static top-0 left-0 w-72 h-screen bg-white/98 dark:bg-slate-800/98 backdrop-blur-xl border-r-4 border-magenta-500 p-6 z-40 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto shadow-2xl"
+      class="fixed top-0 left-0 w-72 h-screen bg-white/98 dark:bg-slate-800/98 backdrop-blur-xl border-r-4 border-magenta-500 p-6 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto shadow-2xl"
       aria-label="Navigation">
 
-      <div class="hidden md:block mb-8">
-        <h1 class="text-3xl font-black tracking-widest bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500 bg-clip-text text-transparent">⬛ DEVINTEL</h1>
-        <div class="h-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-lime-400 mt-2"></div>
+      <div class="hidden md:flex items-center justify-between mb-8 min-h-[52px]">
+        <div class="sidebar-logo-text overflow-hidden">
+          <h1 class="text-2xl font-black tracking-widest bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500 bg-clip-text text-transparent whitespace-nowrap">⬛ DEVINTEL</h1>
+          <div class="h-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-lime-400 mt-2"></div>
+        </div>
+        <button id="sidebarToggle"
+          aria-label="Collapse sidebar"
+          class="ml-2 p-2 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition flex-shrink-0 text-slate-600 dark:text-slate-300">
+          <svg id="sidebarChevron" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
       </div>
 
       <!-- NAVIGATION MENU -->
       <nav class="space-y-2 mb-8">
-        <a href="#searchSection" class="block px-4 py-3 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-cyan-500 hover:pl-3" onclick="closeMobileMenu()">
-          🔎 Search Tech
+        <a href="#searchSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-cyan-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">🔎</span><span class="sidebar-label whitespace-nowrap">Search Tech</span>
         </a>
-        <a href="#newsSection" class="block px-4 py-3 rounded-lg hover:bg-magenta-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-magenta-500 hover:pl-3" onclick="closeMobileMenu()">
-          📰 Dev News
+        <a href="#newsSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-magenta-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-magenta-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">📰</span><span class="sidebar-label whitespace-nowrap">Dev News</span>
         </a>
-        <a href="#githubSection" class="block px-4 py-3 rounded-lg hover:bg-lime-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-lime-500 hover:pl-3" onclick="closeMobileMenu()">
-          🐙 GitHub Trending
+        <a href="#githubSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-lime-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-lime-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">🐙</span><span class="sidebar-label whitespace-nowrap">GitHub Trending</span>
         </a>
-        <a href="#hnSection" class="block px-4 py-3 rounded-lg hover:bg-orange-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-orange-500 hover:pl-3" onclick="closeMobileMenu()">
-          💬 Hacker News
+        <a href="#hnSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-orange-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">💬</span><span class="sidebar-label whitespace-nowrap">Hacker News</span>
         </a>
-        <a href="#aiSection" class="block px-4 py-3 rounded-lg hover:bg-purple-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-purple-500 hover:pl-3" onclick="closeMobileMenu()">
-          🤖 AI & ML
+        <a href="#aiSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-purple-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-purple-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">🤖</span><span class="sidebar-label whitespace-nowrap">AI & ML</span>
         </a>
-        <a href="#securitySection" class="block px-4 py-3 rounded-lg hover:bg-red-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-red-500 hover:pl-3" onclick="closeMobileMenu()">
-          🔐 Security
+        <a href="#securitySection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-red-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">🔐</span><span class="sidebar-label whitespace-nowrap">Security</span>
         </a>
-        <a href="#bookmarksSection" class="block px-4 py-3 rounded-lg hover:bg-yellow-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-yellow-500 hover:pl-3" onclick="closeMobileMenu()">
-          ⭐ Bookmarks
+        <a href="#bookmarksSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-yellow-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-yellow-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">⭐</span><span class="sidebar-label whitespace-nowrap">Bookmarks</span>
         </a>
-        <a href="#analyticsSection" class="block px-4 py-3 rounded-lg hover:bg-blue-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-blue-500 hover:pl-3" onclick="closeMobileMenu()">
-          📊 Analytics
+        <a href="#analyticsSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-blue-500" onclick="closeMobileMenu()">
+          <span class="text-lg flex-shrink-0">📊</span><span class="sidebar-label whitespace-nowrap">Analytics</span>
         </a>
       </nav>
 
@@ -102,16 +111,16 @@
       <div class="space-y-3">
         <button
           id="themeToggle"
-          class="w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300"
+          class="w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300 flex items-center justify-center gap-2"
           aria-label="Toggle between light and dark theme">
-          🌙 DARK MODE
+          <span class="flex-shrink-0">🌙</span><span class="sidebar-label">DARK MODE</span>
         </button>
 
         <button
           id="installBtn"
-          class="hidden w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-magenta-400 to-magenta-500 hover:from-magenta-500 hover:to-magenta-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-magenta-300"
+          class="hidden w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-magenta-400 to-magenta-500 hover:from-magenta-500 hover:to-magenta-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-magenta-300 flex items-center justify-center gap-2"
           aria-label="Install application">
-          📱 INSTALL APP
+          <span class="flex-shrink-0">📱</span><span class="sidebar-label">INSTALL APP</span>
         </button>
       </div>
     </aside>

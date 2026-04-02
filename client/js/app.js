@@ -32,6 +32,31 @@ window.addEventListener('resize', function() {
   if (window.innerWidth >= 768) closeMobileMenu();
 });
 
+// ---- Sidebar Collapse (desktop only) ----
+
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarChevron = document.getElementById('sidebarChevron');
+
+function setSidebarCollapsed(collapsed) {
+  document.body.classList.toggle('sidebar-collapsed', collapsed);
+  localStorage.setItem('devintelSidebarCollapsed', String(collapsed));
+  if (sidebarChevron) {
+    sidebarChevron.style.transform = collapsed ? 'rotate(180deg)' : '';
+  }
+  if (sidebarToggle) {
+    sidebarToggle.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+  }
+}
+
+if (sidebarToggle) {
+  sidebarToggle.addEventListener('click', function() {
+    setSidebarCollapsed(!document.body.classList.contains('sidebar-collapsed'));
+  });
+}
+
+// Restore collapse state on load
+setSidebarCollapsed(localStorage.getItem('devintelSidebarCollapsed') === 'true');
+
 // ---- Theme Management ----
 
 const themeToggle = document.getElementById('themeToggle');
