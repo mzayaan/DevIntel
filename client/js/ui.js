@@ -1,147 +1,188 @@
 // ============================================
-// UI HELPERS — DOM manipulation utilities
-// Depends on: nothing (pure DOM + vanilla JS)
+// UI HELPERS
 // ============================================
 
-/**
- * Debounce — rate-limit repeated calls
- */
 function debounce(func, delay) {
   let timeoutId;
-  return function() {
+  return function () {
     const args = arguments;
     const ctx = this;
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(function() { func.apply(ctx, args); }, delay);
+    timeoutId = setTimeout(function () { func.apply(ctx, args); }, delay);
   };
 }
 
-/**
- * Escape HTML to prevent XSS
- */
 function escapeHTML(str) {
   if (str === undefined || str === null) return '';
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(str).replace(/[&<>"']/g, function(char) { return map[char]; });
+  return String(str).replace(/[&<>"']/g, function (c) { return map[c]; });
 }
 
-/**
- * Validate URL safely
- */
 function isValidURL(str) {
+  try { new URL(str); return true; } catch (_) { return false; }
+}
+
+function _bookmarkSet() {
   try {
-    new URL(str);
-    return true;
-  } catch (_) {
-    return false;
-  }
+    const list = JSON.parse(localStorage.getItem('devintelBookmarks')) || [];
+    return new Set(list.map(function (b) { return b.url; }));
+  } catch (_) { return new Set(); }
+}
+
+function isBookmarked(url) {
+  return _bookmarkSet().has(url);
 }
 
 /**
- * Show animated loading skeleton cards
+ * Skeleton loader.
  */
 function showSkeleton(containerId, count) {
   count = count || 6;
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const skeletons = Array(count).fill(0).map(function() {
-    return '<div class="cyber-card skeleton dark:bg-slate-700">' +
-      '<div class="h-6 w-3/4 mb-4 rounded bg-slate-300 dark:bg-slate-600"></div>' +
-      '<div class="h-4 w-full mb-2 rounded bg-slate-200 dark:bg-slate-500"></div>' +
-      '<div class="h-4 w-2/3 rounded bg-slate-200 dark:bg-slate-500"></div>' +
+  const html = Array(count).fill(0).map(function (_, i) {
+    return '<div class="cyber-card skeleton" style="animation-delay:' + (i * 40) + 'ms">' +
+      '<div class="skeleton-line" style="height:14px;width:60%;margin-bottom:12px"></div>' +
+      '<div class="skeleton-line" style="height:10px;width:100%;margin-bottom:8px"></div>' +
+      '<div class="skeleton-line" style="height:10px;width:85%;margin-bottom:8px"></div>' +
+      '<div class="skeleton-line" style="height:10px;width:50%"></div>' +
       '</div>';
   }).join('');
-
-  container.innerHTML = skeletons;
+  container.innerHTML = html;
 }
 
 /**
- * Create a cyberpunk article/repo card
+ * Build an article/repo card.
+ * Signature kept stable: (title, description, url, extra, type)
+ * `extra` is opaque HTML rendered in the meta row area — used for badges.
  */
 function createCard(title, description, url, extra, type) {
   extra = extra || '';
   type = type || 'news';
 
-  if (!isValidURL(url)) {
-    return '';
-  }
+  if (!isValidURL(url)) return '';
 
   const safeTitle = escapeHTML(title);
-  const safeDescription = escapeHTML(description || '');
-  const safeUrl = escapeHTML(url);
-  const encodedTitle = encodeURIComponent(title);
-  const encodedUrl = encodeURIComponent(url);
+  const safeDesc  = escapeHTML(description || '');
+  const safeUrl   = escapeHTML(url);
+  const encTitle  = encodeURIComponent(title);
+  const encUrl    = encodeURIComponent(url);
 
-  return '<article class="cyber-card ' + type + '">' +
-    '<h3 class="cyber-card-title text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300">' +
-      safeTitle +
-    '</h3>' +
-    '<p class="cyber-card-desc">' + safeDescription + '</p>' +
-    extra +
-    '<div class="cyber-card-footer gap-3">' +
-      '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer"' +
-        ' class="flex-1 text-sm text-center py-2 px-3 rounded font-black tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-md"' +
-        ' aria-label="Read article: ' + safeTitle + '">VISIT →</a>' +
-      '<button onclick="saveBookmark(\'' + encodedTitle + '\',\'' + encodedUrl + '\')"' +
-        ' class="px-4 py-2 rounded-lg font-black text-sm tracking-widest bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-yellow-300"' +
-        ' aria-label="Save article: ' + safeTitle + '" title="Save to bookmarks">⭐ SAVE</button>' +
-    '</div>' +
+  const saved = isBookmarked(url);
+  const savedClass = saved ? ' saved' : '';
+  const savedLabel = saved ? 'Remove bookmark' : 'Save article';
+  // Star icon: filled if saved, outlined otherwise
+  const starIcon = saved
+    ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>';
+
+  return '<article class="cyber-card ' + escapeHTML(type) + '" data-url="' + safeUrl + '">' +
+      (extra ? '<div class="meta-row">' + extra + '</div>' : '') +
+      '<h3 class="cyber-card-title">' + safeTitle + '</h3>' +
+      '<p class="cyber-card-desc">' + safeDesc + '</p>' +
+      '<div class="cyber-card-footer">' +
+        '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Read: ' + safeTitle + '">Read →</a>' +
+        '<button type="button" class="save-btn' + savedClass + '"' +
+          ' onclick="toggleBookmark(\'' + encTitle + '\',\'' + encUrl + '\')"' +
+          ' aria-label="' + savedLabel + '" title="' + savedLabel + '">' + starIcon + '</button>' +
+      '</div>' +
     '</article>';
 }
 
-/**
- * Show error state in a container
- */
 function showError(containerId, message) {
   message = message || 'Failed to load content';
   const container = document.getElementById(containerId);
   if (!container) return;
 
   container.innerHTML =
-    '<div class="col-span-full cyber-card security border-red-400 hover:border-red-600">' +
-      '<p class="font-black text-red-700 dark:text-red-400 mb-2">⚠️ ERROR</p>' +
-      '<p class="text-red-600 dark:text-red-400 font-semibold">' + escapeHTML(message) + '</p>' +
-      '<p class="text-sm text-red-500 mt-2">Check your connection and try again.</p>' +
+    '<div class="empty-state">' +
+      '<div class="empty-state-icon">⚠</div>' +
+      '<p class="font-medium" style="color: var(--text);">' + escapeHTML(message) + '</p>' +
+      '<p class="text-xs mt-1">Couldn\'t reach the feed. The other sections are unaffected.</p>' +
+    '</div>';
+}
+
+function showEmpty(containerId, message, icon) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML =
+    '<div class="empty-state">' +
+      '<div class="empty-state-icon">' + (icon || '∅') + '</div>' +
+      '<p>' + escapeHTML(message || 'Nothing to show') + '</p>' +
     '</div>';
 }
 
 /**
- * Show toast notification
+ * Toast notification.
  */
 function showNotification(message, type) {
   type = type || 'success';
-  const notification = document.createElement('div');
-  const typeClass = type === 'error' ? 'notification error'
+  const cls = type === 'error' ? 'notification error'
     : type === 'info' ? 'notification info'
     : 'notification success';
 
-  notification.className = typeClass;
-  notification.setAttribute('role', 'alert');
-  notification.setAttribute('aria-live', 'polite');
-  notification.textContent = message;
+  const el = document.createElement('div');
+  el.className = cls;
+  el.setAttribute('role', 'alert');
+  el.setAttribute('aria-live', 'polite');
+  el.textContent = message;
+  document.body.appendChild(el);
 
-  document.body.appendChild(notification);
-
-  setTimeout(function() {
-    notification.style.transition = 'opacity 0.3s ease-out';
-    notification.style.opacity = '0';
-    setTimeout(function() { notification.remove(); }, 300);
+  setTimeout(function () {
+    el.style.transition = 'opacity .25s, transform .25s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    setTimeout(function () { el.remove(); }, 260);
   }, 3000);
 }
 
 /**
- * Update the "last sync" timestamp in the footer
+ * Stagger card entry — assumes container.innerHTML was just set with .cyber-card children.
  */
-function updateRefreshTime() {
-  const element = document.getElementById('updateTime');
-  if (!element) return;
-  element.textContent = new Date().toLocaleTimeString(undefined, {
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
+function staggerCards(containerId, step) {
+  step = step || 50;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const cards = container.querySelectorAll('.cyber-card');
+  cards.forEach(function (c, i) {
+    c.style.animationDelay = (i * step) + 'ms';
   });
 }
 
-// CommonJS export for testing (no-op in browser)
+/**
+ * Update last-sync labels (footer + header).
+ */
+let _lastSyncTs = Date.now();
+function updateRefreshTime() {
+  _lastSyncTs = Date.now();
+  const t = new Date(_lastSyncTs).toLocaleTimeString(undefined, {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+  const a = document.getElementById('updateTime');
+  if (a) a.textContent = t;
+  refreshRelativeLabel();
+}
+
+function refreshRelativeLabel() {
+  const el = document.getElementById('lastUpdatedRel');
+  if (!el) return;
+  const sec = Math.max(0, Math.round((Date.now() - _lastSyncTs) / 1000));
+  let txt;
+  if (sec < 10) txt = 'just now';
+  else if (sec < 60) txt = sec + 's ago';
+  else if (sec < 3600) txt = Math.floor(sec / 60) + 'm ago';
+  else txt = Math.floor(sec / 3600) + 'h ago';
+  el.textContent = txt;
+}
+
+setInterval(refreshRelativeLabel, 15000);
+
+// CommonJS export — no-op in browser
 if (typeof module !== 'undefined') {
-  module.exports = { debounce, escapeHTML, isValidURL, showSkeleton, createCard, showError, showNotification, updateRefreshTime };
+  module.exports = {
+    debounce, escapeHTML, isValidURL, isBookmarked,
+    showSkeleton, createCard, showError, showEmpty,
+    showNotification, updateRefreshTime, staggerCards,
+  };
 }

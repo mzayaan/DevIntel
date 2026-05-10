@@ -1,282 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DevIntel - Developer news aggregator with trending repositories, tech articles, and curated content">
-  <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
-  <meta name="color-scheme" content="light dark">
-  <meta property="og:title" content="DevIntel - Developer News Aggregator">
-  <meta property="og:description" content="Stay updated with the latest developer news, AI articles, GitHub trending repos, and security updates">
+  <meta name="description" content="DevIntel — minimal developer news aggregator. Dev.to, GitHub trending, Hacker News, AI & security feeds in one place.">
+  <meta name="theme-color" content="#0b0f17">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:title" content="DevIntel — Developer News">
+  <meta property="og:description" content="Curated developer news, trending repositories, and AI/security updates.">
   <meta property="og:type" content="website">
 
-  <title>DevIntel - Cyberpunk Intelligence Hub</title>
+  <title>DevIntel — Developer News</title>
 
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f172a'/><rect x='10' y='10' width='35' height='35' fill='%2306b6d4'/><rect x='30' y='30' width='40' height='40' fill='%23ec4899'/><rect x='55' y='55' width='35' height='35' fill='%2384cc16'/></svg>">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:bg-slate-900 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-slate-900 dark:text-slate-100 font-sans overflow-x-hidden"
-  style="background-attachment: fixed;">
+<body>
 
-  <!-- SKIP TO CONTENT LINK -->
-  <a href="#mainContent" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:p-4 focus:bg-cyan-500 focus:text-white focus:rounded">
+  <!-- Skip-link -->
+  <a href="#mainContent" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 btn-primary">
     Skip to main content
   </a>
 
-  <!-- FLOATING GRID BACKGROUND -->
-  <div class="fixed inset-0 opacity-5 pointer-events-none" style="background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 0, 255, 0.1) 25%, rgba(255, 0, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(255, 0, 255, 0.1) 75%, rgba(255, 0, 255, 0.1) 76%, transparent 77%, transparent); background-size: 80px 80px;"></div>
-
-  <!-- NAVIGATION BAR (Mobile) -->
-  <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b-4 border-cyan-500 z-50 md:hidden shadow-xl">
-    <div class="flex items-center justify-between p-4">
-      <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500">⬛ DEVINTEL</h1>
-      <button
-        id="menuToggle"
-        class="p-2 hover:bg-cyan-100 dark:hover:bg-slate-700 rounded transition transform hover:scale-110 active:scale-95"
-        aria-label="Toggle navigation menu"
-        aria-expanded="false"
-        aria-controls="sidebar">
-        <svg class="w-6 h-6 text-magenta-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
+  <!-- MOBILE TOP BAR -->
+  <nav class="fixed top-0 left-0 right-0 z-40 md:hidden flex items-center justify-between px-4 h-14"
+       style="background: var(--surface); border-bottom: 1px solid var(--border);">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--accent); color: var(--accent-fg);">
+        <span class="font-bold text-sm">D</span>
+      </div>
+      <span class="font-semibold tracking-tight">DevIntel</span>
     </div>
+    <button id="menuToggle" class="btn-icon" aria-label="Toggle menu" aria-expanded="false" aria-controls="sidebar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </nav>
 
-  <!-- OVERLAY (Mobile) -->
-  <div id="overlay" class="fixed inset-0 bg-black/60 hidden z-30 md:hidden transition-opacity backdrop-blur-sm"
-    aria-hidden="true"></div>
+  <!-- Mobile overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 hidden z-30 md:hidden" aria-hidden="true"></div>
 
-  <!-- LAYOUT CONTAINER -->
-  <div class="flex min-h-screen pt-16 md:pt-0">
+  <div class="flex min-h-screen pt-14 md:pt-0">
 
     <!-- SIDEBAR -->
-    <aside
-      id="sidebar"
-      class="fixed top-0 left-0 w-72 h-screen bg-white/98 dark:bg-slate-800/98 backdrop-blur-xl border-r-4 border-magenta-500 p-6 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto shadow-2xl"
-      aria-label="Navigation">
+    <aside id="sidebar"
+           class="fixed top-0 left-0 w-64 h-screen z-40 transform -translate-x-full md:translate-x-0 overflow-y-auto"
+           style="background: var(--surface); border-right: 1px solid var(--border);"
+           aria-label="Navigation">
 
-      <div class="hidden md:flex items-center justify-between mb-8 min-h-[52px]">
-        <div class="sidebar-logo-text overflow-hidden">
-          <h1 class="text-2xl font-black tracking-widest bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-500 bg-clip-text text-transparent whitespace-nowrap">⬛ DEVINTEL</h1>
-          <div class="h-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-lime-400 mt-2"></div>
+      <div class="flex items-center justify-between h-14 px-4" style="border-bottom: 1px solid var(--border);">
+        <div class="sidebar-logo-text flex items-center gap-2">
+          <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--accent); color: var(--accent-fg);">
+            <span class="font-bold text-sm">D</span>
+          </div>
+          <span class="font-semibold tracking-tight">DevIntel</span>
         </div>
-        <button id="sidebarToggle"
-          aria-label="Collapse sidebar"
-          class="ml-2 p-2 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition flex-shrink-0 text-slate-600 dark:text-slate-300">
-          <svg id="sidebarChevron" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        <button id="sidebarToggle" class="btn-icon hidden md:inline-flex" aria-label="Collapse sidebar">
+          <svg id="sidebarChevron" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
       </div>
 
-      <!-- NAVIGATION MENU -->
-      <nav class="space-y-2 mb-8">
-        <a href="#searchSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-cyan-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-cyan-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">🔎</span><span class="sidebar-label whitespace-nowrap">Search Tech</span>
+      <nav class="p-3 space-y-1">
+        <a href="#searchSection"    class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/></svg>
+          <span class="sidebar-label">Search</span>
         </a>
-        <a href="#newsSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-magenta-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-magenta-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">📰</span><span class="sidebar-label whitespace-nowrap">Dev News</span>
+        <a href="#newsSection"      class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m0 0a2 2 0 012 2v9a2 2 0 01-2 2zM7 8h6m-6 4h6m-6 4h4"/></svg>
+          <span class="sidebar-label">Dev News</span>
         </a>
-        <a href="#githubSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-lime-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-lime-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">🐙</span><span class="sidebar-label whitespace-nowrap">GitHub Trending</span>
+        <a href="#githubSection"    class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          <span class="sidebar-label">Trending Repos</span>
         </a>
-        <a href="#hnSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-orange-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">💬</span><span class="sidebar-label whitespace-nowrap">Hacker News</span>
+        <a href="#hnSection"        class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <span class="sidebar-label">Hacker News</span>
         </a>
-        <a href="#aiSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-purple-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-purple-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">🤖</span><span class="sidebar-label whitespace-nowrap">AI & ML</span>
+        <a href="#aiSection"        class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>
+          <span class="sidebar-label">AI & ML</span>
         </a>
-        <a href="#securitySection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-red-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">🔐</span><span class="sidebar-label whitespace-nowrap">Security</span>
+        <a href="#securitySection"  class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="sidebar-label">Security</span>
         </a>
-        <a href="#bookmarksSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-yellow-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-yellow-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">⭐</span><span class="sidebar-label whitespace-nowrap">Bookmarks</span>
+        <a href="#bookmarksSection" class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          <span class="sidebar-label">Saved</span>
         </a>
-        <a href="#analyticsSection" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-100 dark:hover:bg-slate-700 transition font-semibold text-slate-800 dark:text-slate-200 border-l-4 border-transparent hover:border-blue-500" onclick="closeMobileMenu()">
-          <span class="text-lg flex-shrink-0">📊</span><span class="sidebar-label whitespace-nowrap">Analytics</span>
+        <a href="#analyticsSection" class="nav-item" data-nav onclick="closeMobileMenu()">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6m0 0l4 4m-4-4l-4 4M21 19H3"/></svg>
+          <span class="sidebar-label">Analytics</span>
         </a>
       </nav>
 
-      <!-- DIVIDER -->
-      <div class="h-1 bg-gradient-to-r from-cyan-400 to-magenta-400 my-6 rounded-full"></div>
-
-      <!-- ACTION BUTTONS -->
-      <div class="space-y-3">
-        <button
-          id="themeToggle"
-          class="w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-500 hover:to-cyan-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300 flex items-center justify-center gap-2"
-          aria-label="Toggle between light and dark theme">
-          <span class="flex-shrink-0">🌙</span><span class="sidebar-label">DARK MODE</span>
+      <div class="p-3 mt-auto absolute bottom-0 left-0 right-0 space-y-2" style="border-top: 1px solid var(--border); background: var(--surface);">
+        <button id="themeToggle" class="btn w-full" aria-label="Toggle theme">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          <span class="sidebar-label">Theme</span>
         </button>
-
-        <button
-          id="installBtn"
-          class="hidden w-full px-4 py-3 rounded-lg font-black text-sm tracking-wide bg-gradient-to-r from-magenta-400 to-magenta-500 hover:from-magenta-500 hover:to-magenta-600 text-white transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-magenta-300 flex items-center justify-center gap-2"
-          aria-label="Install application">
-          <span class="flex-shrink-0">📱</span><span class="sidebar-label">INSTALL APP</span>
+        <button id="installBtn" class="btn btn-primary w-full hidden" aria-label="Install app">
+          <span class="sidebar-label">Install App</span>
         </button>
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main id="mainContent" class="flex-1 overflow-y-auto min-w-0">
+    <!-- MAIN -->
+    <main id="mainContent" class="flex-1 min-w-0">
 
-      <!-- PAGE HEADER -->
-      <header class="bg-gradient-to-r from-slate-50 via-cyan-50 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b-4 border-cyan-500 sticky top-0 z-20 shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 py-4 md:py-6">
-          <div class="flex items-center gap-4 mb-1">
-            <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-cyan-500 via-magenta-500 to-lime-400 rounded-lg transform -rotate-45 flex-shrink-0"></div>
-            <h1 class="text-2xl md:text-4xl font-black tracking-wider bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-600 bg-clip-text text-transparent">DEVINTEL</h1>
+      <!-- HEADER -->
+      <header class="sticky top-0 z-20 hidden md:block" style="background: rgba(11,15,23,0.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);">
+        <div class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
+          <h1 class="text-base font-semibold tracking-tight" style="color: var(--text);">DEVINTEL</h1>
+          <span class="text-xs" style="color: var(--muted);">— developer news, distilled</span>
+          <div class="flex-1"></div>
+
+          <div class="text-xs flex items-center gap-2" style="color: var(--muted);">
+            <span class="inline-block w-1.5 h-1.5 rounded-full" style="background: var(--success);"></span>
+            <span>Updated <span id="lastUpdatedRel" class="mono">just now</span></span>
           </div>
-          <p class="text-slate-700 dark:text-slate-300 font-semibold text-sm md:text-base">🎮 CYBERPUNK INTELLIGENCE HUB | STAY AHEAD OF THE CODE</p>
+
+          <button id="refreshBtn" class="btn-icon" aria-label="Refresh feeds" title="Refresh all feeds">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0114-3.5M20 14a8 8 0 01-14 3.5"/></svg>
+          </button>
+
+          <button id="bellBtn" class="btn-icon relative" aria-label="Notifications">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14V11a6 6 0 10-12 0v3a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0"/></svg>
+            <span id="bellBadge" class="bell-badge">0</span>
+          </button>
         </div>
       </header>
 
-      <!-- PAGE CONTENT -->
-      <div class="max-w-7xl mx-auto px-4 py-6 md:py-10 space-y-12 md:space-y-16">
+      <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 space-y-12">
 
-        <!-- SEARCH SECTION -->
+        <!-- HERO / SEARCH -->
         <section id="searchSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-cyan-500 mb-2">🔎 SEARCH TECHNOLOGIES</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Find articles and repositories across the tech universe</p>
+          <h2 class="section-title text-2xl md:text-3xl mb-2">Stay current, without the noise.</h2>
+          <p class="section-sub mb-6">Search across Dev.to, GitHub trending, and Hacker News.</p>
+
+          <div class="relative max-w-2xl">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style="color: var(--muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/></svg>
+            <input id="searchInput" type="search"
+                   placeholder="Filter all feeds — try React, Rust, security…"
+                   class="search-input pl-9"
+                   aria-label="Search">
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-3 mb-8">
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="React, AI, Docker, Kubernetes..."
-              class="flex-1 px-4 py-3 md:py-4 rounded-lg bg-white dark:bg-slate-700 border-2 border-cyan-300 dark:border-cyan-700 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:focus:ring-cyan-800 font-semibold text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 transition shadow-md hover:shadow-lg hover:border-cyan-400 text-base"
-              aria-label="Search technologies">
-
-            <button
-              onclick="searchTech()"
-              class="px-6 md:px-8 py-3 md:py-4 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white font-black tracking-wide transition transform hover:scale-105 active:scale-95 shadow-lg border-2 border-cyan-300 whitespace-nowrap text-sm md:text-base">
-              SEARCH
-            </button>
-          </div>
-
-          <div id="searchResults" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <div id="searchResults" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </section>
 
-        <!-- DEV NEWS SECTION -->
+        <!-- DEV NEWS -->
         <section id="newsSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-magenta-600 to-magenta-500 mb-2">📰 DEVELOPER NEWS</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-magenta-400 to-magenta-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Latest insights from the Dev.to ecosystem</p>
+          <div class="flex items-end justify-between flex-wrap gap-3 mb-4">
+            <div>
+              <h2 class="section-title">Developer News</h2>
+              <p class="section-sub mb-0">Latest from the Dev.to community.</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5" id="newsFilters" data-filter-group="news">
+              <button class="filter-pill active" data-filter="all">All</button>
+              <button class="filter-pill" data-filter="javascript">JavaScript</button>
+              <button class="filter-pill" data-filter="python">Python</button>
+              <button class="filter-pill" data-filter="ai">AI/ML</button>
+              <button class="filter-pill" data-filter="security">Security</button>
+              <button class="filter-pill" data-filter="devops">DevOps</button>
+            </div>
           </div>
-
-          <div class="mb-6 flex flex-wrap gap-2">
-            <button onclick="filterTech('all')" class="cyber-filter-btn" aria-label="Show all news">ALL</button>
-            <button onclick="filterTech('javascript')" class="cyber-filter-btn" aria-label="Filter by JavaScript">JAVASCRIPT</button>
-            <button onclick="filterTech('python')" class="cyber-filter-btn" aria-label="Filter by Python">PYTHON</button>
-            <button onclick="filterTech('ai')" class="cyber-filter-btn" aria-label="Filter by AI">AI/ML</button>
-            <button onclick="filterTech('security')" class="cyber-filter-btn" aria-label="Filter by Security">SECURITY</button>
-            <button onclick="filterTech('devops')" class="cyber-filter-btn" aria-label="Filter by DevOps">DEVOPS</button>
-          </div>
-
-          <div id="newsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <div id="newsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- GITHUB SECTION -->
+        <!-- GITHUB -->
         <section id="githubSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-lime-600 to-lime-500 mb-2">🐙 GITHUB TRENDING</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-lime-400 to-lime-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Most starred repositories in real-time</p>
+          <div class="flex items-end justify-between flex-wrap gap-3 mb-4">
+            <div>
+              <h2 class="section-title">Trending Repositories</h2>
+              <p class="section-sub mb-0">Most starred projects, refreshed continuously.</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5" id="githubFilters" data-filter-group="github">
+              <button class="filter-pill active" data-filter="all">All</button>
+              <button class="filter-pill" data-filter="react">React</button>
+              <button class="filter-pill" data-filter="vue">Vue</button>
+              <button class="filter-pill" data-filter="angular">Angular</button>
+              <button class="filter-pill" data-filter="rust">Rust</button>
+              <button class="filter-pill" data-filter="tensorflow">TensorFlow</button>
+            </div>
           </div>
-
-          <div class="mb-6 flex flex-wrap gap-2">
-            <button onclick="searchFramework('react')" class="cyber-filter-btn" aria-label="Filter by React">REACT</button>
-            <button onclick="searchFramework('vue')" class="cyber-filter-btn" aria-label="Filter by Vue">VUE</button>
-            <button onclick="searchFramework('angular')" class="cyber-filter-btn" aria-label="Filter by Angular">ANGULAR</button>
-            <button onclick="searchFramework('tensorflow')" class="cyber-filter-btn" aria-label="Filter by TensorFlow">TENSORFLOW</button>
-          </div>
-
-          <div id="githubContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <div id="githubContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- HACKER NEWS SECTION -->
+        <!-- HACKER NEWS -->
         <section id="hnSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 mb-2">💬 HACKER NEWS PULSE</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Top stories from the developer community</p>
-          </div>
-          <div id="hnContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <h2 class="section-title">Hacker News</h2>
+          <p class="section-sub">Top stories right now.</p>
+          <div id="hnContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- AI NEWS SECTION -->
+        <!-- AI -->
         <section id="aiSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-500 mb-2">🤖 AI & MACHINE LEARNING</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">AI/ML breakthroughs and innovations</p>
-          </div>
-          <div id="aiContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <h2 class="section-title">AI &amp; Machine Learning</h2>
+          <p class="section-sub">Research notes and applied ML reading.</p>
+          <div id="aiContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- SECURITY SECTION -->
+        <!-- SECURITY -->
         <section id="securitySection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500 mb-2">🔐 SECURITY & PRIVACY</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-red-400 to-red-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Critical security updates and threat intelligence</p>
-          </div>
-          <div id="securityContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <h2 class="section-title">Security</h2>
+          <p class="section-sub">Vulnerabilities, advisories, defensive patterns.</p>
+          <div id="securityContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- BOOKMARKS SECTION -->
+        <!-- BOOKMARKS -->
         <section id="bookmarksSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-yellow-500 mb-2">⭐ SAVED ARTICLES</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Your personal intelligence collection</p>
-          </div>
-          <div id="bookmarkContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+          <h2 class="section-title">Saved</h2>
+          <p class="section-sub">Articles you've bookmarked.</p>
+          <div id="bookmarkContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- ANALYTICS SECTION -->
+        <!-- ANALYTICS -->
         <section id="analyticsSection" class="scroll-mt-20">
-          <div class="mb-6 md:mb-8">
-            <h2 class="text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-500 mb-2">📊 INTELLIGENCE ANALYTICS</h2>
-            <div class="h-1 w-32 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold mt-3">Your DevIntel usage metrics and insights</p>
-          </div>
-          <div id="analyticsContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6"></div>
+          <h2 class="section-title">Analytics</h2>
+          <p class="section-sub">Your activity at a glance.</p>
+          <div id="analyticsContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- FOOTER -->
-        <footer class="border-t-4 border-cyan-400 py-8 md:py-10 mt-12 md:mt-20">
-          <div class="text-center space-y-3">
-            <p class="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-magenta-600 to-lime-600 text-lg">⬛ DEVINTEL CYBERPUNK HUB ⬛</p>
-            <p class="text-slate-700 dark:text-slate-400 font-semibold">Built for developers who live on the bleeding edge</p>
-            <p class="text-slate-600 dark:text-slate-500 text-sm">Last sync: <span id="updateTime" class="font-mono text-cyan-600 dark:text-cyan-400">Just now</span></p>
-          </div>
+        <footer class="pt-10 pb-8 text-center text-xs" style="color: var(--muted); border-top: 1px solid var(--border);">
+          <p>DevIntel — built for developers. Last sync: <span id="updateTime" class="mono">Just now</span></p>
         </footer>
 
       </div>
-
     </main>
-
   </div>
 
-  <!-- APPLICATION SCRIPTS (load order matters — no bundler) -->
+  <!-- New articles toast banner -->
+  <div id="newBanner" class="new-banner" role="status" aria-live="polite">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    <span><span id="newBannerCount">0</span> new articles — tap to scroll up</span>
+  </div>
+
+  <!-- Notifications drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
+  <aside id="notifDrawer" class="drawer" aria-label="Notifications" aria-hidden="true">
+    <div class="flex items-center justify-between px-4 h-14" style="border-bottom: 1px solid var(--border);">
+      <h3 class="font-semibold">Notifications</h3>
+      <div class="flex items-center gap-1">
+        <button id="markAllRead" class="text-xs px-2 py-1 rounded hover:underline" style="color: var(--accent);">Mark all read</button>
+        <button id="closeDrawer" class="btn-icon" aria-label="Close notifications">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="notifList" class="flex-1 overflow-y-auto"></div>
+  </aside>
+
+  <!-- Scripts (load order matters — no bundler) -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/app.js" defer></script>
 
 </body>
-
 </html>
