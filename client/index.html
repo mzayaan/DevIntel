@@ -24,6 +24,9 @@
   <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
   <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -43,21 +46,23 @@
       </div>
       <span class="font-semibold tracking-tight">DevIntel</span>
     </div>
-    <button id="menuToggle" class="btn-icon" aria-label="Toggle menu" aria-expanded="false" aria-controls="sidebar">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
+    <div class="flex items-center gap-1">
+      <div class="text-xs flex items-center gap-1.5 mr-1" style="color: var(--muted);">
+        <span class="inline-block w-1.5 h-1.5 rounded-full" style="background: var(--success);"></span>
+        <span class="mono" id="lastUpdatedRelMobile">just now</span>
+      </div>
+      <button id="bellBtnMobile" class="btn-icon relative" aria-label="Notifications">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14V11a6 6 0 10-12 0v3a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0"/></svg>
+        <span id="bellBadgeMobile" class="bell-badge">0</span>
+      </button>
+    </div>
   </nav>
-
-  <!-- Mobile overlay -->
-  <div id="overlay" class="fixed inset-0 bg-black/40 hidden z-30 md:hidden" aria-hidden="true"></div>
 
   <div class="flex min-h-screen pt-14 md:pt-0">
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (desktop/tablet only) -->
     <aside id="sidebar"
-           class="fixed top-0 left-0 w-64 h-screen z-40 transform -translate-x-full md:translate-x-0 overflow-y-auto"
+           class="hidden md:block fixed top-0 left-0 w-64 h-screen z-40 overflow-y-auto"
            style="background: var(--surface); border-right: 1px solid var(--border);"
            aria-label="Navigation">
 
@@ -68,7 +73,7 @@
           </div>
           <span class="font-semibold tracking-tight">DevIntel</span>
         </div>
-        <button id="sidebarToggle" class="btn-icon hidden md:inline-flex" aria-label="Collapse sidebar">
+        <button id="sidebarToggle" class="btn-icon" aria-label="Collapse sidebar">
           <svg id="sidebarChevron" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
@@ -124,7 +129,7 @@
     <!-- MAIN -->
     <main id="mainContent" class="flex-1 min-w-0">
 
-      <!-- HEADER -->
+      <!-- HEADER (desktop/tablet only) -->
       <header class="sticky top-0 z-20 hidden md:block app-header">
         <div class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
           <h1 class="text-base font-semibold tracking-tight" style="color: var(--text);">DEVINTEL</h1>
@@ -147,7 +152,7 @@
         </div>
       </header>
 
-      <div class="max-w-6xl mx-auto px-4 md:px-6 py-8 space-y-12">
+      <div class="max-w-6xl mx-auto px-4 md:px-6 pt-6 pb-24 md:py-8 space-y-12">
 
         <!-- HERO / SEARCH -->
         <section id="searchSection" class="scroll-mt-20">
@@ -162,7 +167,7 @@
                    aria-label="Search">
           </div>
 
-          <div id="searchResults" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
+          <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
         </section>
 
         <!-- DEV NEWS -->
@@ -172,16 +177,16 @@
               <h2 class="section-title">Developer News</h2>
               <p class="section-sub mb-0">Latest from the Dev.to community.</p>
             </div>
-            <div class="flex flex-wrap gap-1.5" id="newsFilters" data-filter-group="news">
-              <button class="filter-pill active" data-filter="all">All</button>
-              <button class="filter-pill" data-filter="javascript">JavaScript</button>
-              <button class="filter-pill" data-filter="python">Python</button>
-              <button class="filter-pill" data-filter="ai">AI/ML</button>
-              <button class="filter-pill" data-filter="security">Security</button>
-              <button class="filter-pill" data-filter="devops">DevOps</button>
+            <div class="flex gap-1.5 overflow-x-auto pb-1 filter-scroll" id="newsFilters" data-filter-group="news">
+              <button class="filter-pill active flex-shrink-0" data-filter="all">All</button>
+              <button class="filter-pill flex-shrink-0" data-filter="javascript">JavaScript</button>
+              <button class="filter-pill flex-shrink-0" data-filter="python">Python</button>
+              <button class="filter-pill flex-shrink-0" data-filter="ai">AI/ML</button>
+              <button class="filter-pill flex-shrink-0" data-filter="security">Security</button>
+              <button class="filter-pill flex-shrink-0" data-filter="devops">DevOps</button>
             </div>
           </div>
-          <div id="newsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="newsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- GITHUB -->
@@ -191,44 +196,44 @@
               <h2 class="section-title">Trending Repositories</h2>
               <p class="section-sub mb-0">Most starred projects, refreshed continuously.</p>
             </div>
-            <div class="flex flex-wrap gap-1.5" id="githubFilters" data-filter-group="github">
-              <button class="filter-pill active" data-filter="all">All</button>
-              <button class="filter-pill" data-filter="react">React</button>
-              <button class="filter-pill" data-filter="vue">Vue</button>
-              <button class="filter-pill" data-filter="angular">Angular</button>
-              <button class="filter-pill" data-filter="rust">Rust</button>
-              <button class="filter-pill" data-filter="tensorflow">TensorFlow</button>
+            <div class="flex gap-1.5 overflow-x-auto pb-1 filter-scroll" id="githubFilters" data-filter-group="github">
+              <button class="filter-pill active flex-shrink-0" data-filter="all">All</button>
+              <button class="filter-pill flex-shrink-0" data-filter="react">React</button>
+              <button class="filter-pill flex-shrink-0" data-filter="vue">Vue</button>
+              <button class="filter-pill flex-shrink-0" data-filter="angular">Angular</button>
+              <button class="filter-pill flex-shrink-0" data-filter="rust">Rust</button>
+              <button class="filter-pill flex-shrink-0" data-filter="tensorflow">TensorFlow</button>
             </div>
           </div>
-          <div id="githubContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="githubContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- HACKER NEWS -->
         <section id="hnSection" class="scroll-mt-20">
           <h2 class="section-title">Hacker News</h2>
           <p class="section-sub">Top stories right now.</p>
-          <div id="hnContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="hnContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- AI -->
         <section id="aiSection" class="scroll-mt-20">
           <h2 class="section-title">AI &amp; Machine Learning</h2>
           <p class="section-sub">Research notes and applied ML reading.</p>
-          <div id="aiContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="aiContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- SECURITY -->
         <section id="securitySection" class="scroll-mt-20">
           <h2 class="section-title">Security</h2>
           <p class="section-sub">Vulnerabilities, advisories, defensive patterns.</p>
-          <div id="securityContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="securityContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- BOOKMARKS -->
         <section id="bookmarksSection" class="scroll-mt-20">
           <h2 class="section-title">Saved</h2>
           <p class="section-sub">Articles you've bookmarked.</p>
-          <div id="bookmarkContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="bookmarkContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <!-- ANALYTICS -->
@@ -269,6 +274,32 @@
     </div>
     <div id="notifList" class="flex-1 overflow-y-auto"></div>
   </aside>
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around h-16"
+       style="background: var(--surface); border-top: 1px solid var(--border);"
+       aria-label="Mobile navigation">
+    <a href="#searchSection" class="bottom-nav-item" data-bottom-nav="search">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/></svg>
+      <span>Search</span>
+    </a>
+    <a href="#newsSection" class="bottom-nav-item" data-bottom-nav="news">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m0 0a2 2 0 012 2v9a2 2 0 01-2 2zM7 8h6m-6 4h6m-6 4h4"/></svg>
+      <span>News</span>
+    </a>
+    <a href="#githubSection" class="bottom-nav-item" data-bottom-nav="github">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      <span>Trending</span>
+    </a>
+    <a href="#hnSection" class="bottom-nav-item" data-bottom-nav="hn">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span>HN</span>
+    </a>
+    <a href="#bookmarksSection" class="bottom-nav-item" data-bottom-nav="saved">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+      <span>Saved</span>
+    </a>
+  </nav>
 
   <!-- Scripts (load order matters — no bundler) -->
   <script src="js/config.js"></script>

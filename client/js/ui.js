@@ -171,15 +171,16 @@ function updateRefreshTime() {
 }
 
 function refreshRelativeLabel() {
-  const el = document.getElementById('lastUpdatedRel');
-  if (!el) return;
   const sec = Math.max(0, Math.round((Date.now() - _lastSyncTs) / 1000));
   let txt;
   if (sec < 10) txt = 'just now';
   else if (sec < 60) txt = sec + 's ago';
   else if (sec < 3600) txt = Math.floor(sec / 60) + 'm ago';
   else txt = Math.floor(sec / 3600) + 'h ago';
-  el.textContent = txt;
+  const el = document.getElementById('lastUpdatedRel');
+  if (el) el.textContent = txt;
+  const elMobile = document.getElementById('lastUpdatedRelMobile');
+  if (elMobile) elMobile.textContent = txt;
 }
 
 setInterval(refreshRelativeLabel, 15000);

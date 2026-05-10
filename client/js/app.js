@@ -341,8 +341,10 @@ function loadAnalytics() {
 
 // ---- Notifications system ----
 
-const bellBtn       = document.getElementById('bellBtn');
-const bellBadge     = document.getElementById('bellBadge');
+const bellBtn        = document.getElementById('bellBtn');
+const bellBadge      = document.getElementById('bellBadge');
+const bellBtnMobile  = document.getElementById('bellBtnMobile');
+const bellBadgeMobile = document.getElementById('bellBadgeMobile');
 const notifDrawer   = document.getElementById('notifDrawer');
 const drawerOverlay = document.getElementById('drawerOverlay');
 const closeDrawer   = document.getElementById('closeDrawer');
@@ -367,15 +369,19 @@ function pushNewArticleNotifications(section, articles) {
   renderNotifications();
 }
 
-function renderNotifications() {
-  if (bellBadge) {
-    if (state.unread > 0) {
-      bellBadge.textContent = state.unread > 99 ? '99+' : String(state.unread);
-      bellBadge.classList.add('visible');
-    } else {
-      bellBadge.classList.remove('visible');
-    }
+function _updateBellBadge(badge) {
+  if (!badge) return;
+  if (state.unread > 0) {
+    badge.textContent = state.unread > 99 ? '99+' : String(state.unread);
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
   }
+}
+
+function renderNotifications() {
+  _updateBellBadge(bellBadge);
+  _updateBellBadge(bellBadgeMobile);
   if (!notifList) return;
   if (state.notifications.length === 0) {
     notifList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔔</div><p>No notifications yet</p><p class="text-xs mt-1">You\'ll see new articles here.</p></div>';
@@ -413,6 +419,7 @@ function closeDrawerFn() {
 }
 
 if (bellBtn)       bellBtn.addEventListener('click', openDrawer);
+if (bellBtnMobile) bellBtnMobile.addEventListener('click', openDrawer);
 if (closeDrawer)   closeDrawer.addEventListener('click', closeDrawerFn);
 if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawerFn);
 if (markAllRead) {
@@ -598,27 +605,31 @@ if (themeToggle) {
   applyTheme(stored || preferred);
 })();
 
-// ---- Mobile menu ----
+// ---- Mobile menu (kept as no-op for sidebar onclick= attributes) ----
 
-const menuToggle = document.getElementById('menuToggle');
-const sidebar    = document.getElementById('sidebar');
-const overlay    = document.getElementById('overlay');
+function closeMobileMenu() { /* sidebar is hidden on mobile — no action needed */ }
 
-function closeMobileMenu() {
-  if (sidebar) sidebar.classList.add('-translate-x-full');
-  if (overlay) overlay.classList.add('hidden');
-  if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
-}
-if (menuToggle) {
-  menuToggle.addEventListener('click', function () {
-    const isOpen = !sidebar.classList.contains('-translate-x-full');
-    sidebar.classList.toggle('-translate-x-full', isOpen);
-    overlay.classList.toggle('hidden', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(!isOpen));
-  });
-}
-if (overlay) overlay.addEventListener('click', closeMobileMenu);
-window.addEventListener('resize', function () { if (window.innerWidth >= 768) closeMobileMenu(); });
+// ---- Bottom nav active state ----
+
+(function initBottomNav() {
+  const sectionIds = ['searchSection', 'newsSection', 'githubSection', 'hnSection', 'bookmarksSection'];
+  const navMap = { searchSection: 'search', newsSection: 'news', githubSection: 'github', hnSection: 'hn', bookmarksSection: 'saved' };
+
+  function updateBottomNav() {
+    if (window.innerWidth >= 768) return;
+    let active = sectionIds[0];
+    sectionIds.forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 80) active = id;
+    });
+    document.querySelectorAll('[data-bottom-nav]').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-bottom-nav') === navMap[active]);
+    });
+  }
+
+  window.addEventListener('scroll', updateBottomNav, { passive: true });
+  updateBottomNav();
+})();
 
 // ---- Sidebar collapse ----
 
