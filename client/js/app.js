@@ -66,7 +66,7 @@ function handleFeedLoaded(section, articles, opts) {
 
   if (freshlyNew.length > 0) {
     pushNewArticleNotifications(section, freshlyNew);
-    queueNewBanner(freshlyNew.length);
+    _pendingNewArticleCount += freshlyNew.length;
     maybeBrowserNotify(freshlyNew);
   }
 
@@ -435,56 +435,69 @@ if (notifList) {
 }
 
 // ---- New-articles floating banner ----
-// Aggregates counts across a polling cycle, shows ONCE for 4s, then dismissed.
-// Will not re-appear until the NEXT batch of truly-new articles arrives.
+//
+// Strict rules:
+//   1. ONLY shown when newArticlesCount > 0.
+//   2. Hidden on initial mount and immediately if count is 0/null/undefined.
+//   3. Auto-dismissed after 4s; instantly on × click or banner-body click.
+//   4. Shown ONCE per refresh cycle (one per fetch that returned new content).
+//   5. Re-show requires the NEXT refresh cycle to add genuinely-new article URLs
+//      that weren't in `state.seen` already.
 
 const newBanner      = document.getElementById('newBanner');
 const newBannerCount = document.getElementById('newBannerCount');
-const newBannerClose = document.getElementById('newBannerClose');
 
-let _bannerVisible = false;
+let _pendingNewArticleCount = 0;   // accumulator for the current refresh cycle
 let _bannerDismissTimer = null;
-let _bannerAggregateTimer = null;
-let _pendingCount = 0;
 
-function dismissBanner() {
+function hideBanner() {
   if (!newBanner) return;
   newBanner.classList.remove('visible');
-  _bannerVisible = false;
-  _pendingCount = 0;
   clearTimeout(_bannerDismissTimer);
+  _bannerDismissTimer = null;
 }
 
-function queueNewBanner(count) {
-  _pendingCount += count;
-  // Aggregate counts arriving in the same polling cycle (within 800ms).
-  clearTimeout(_bannerAggregateTimer);
-  _bannerAggregateTimer = setTimeout(function () {
-    if (_pendingCount === 0 || !newBanner || !newBannerCount) return;
-    if (_bannerVisible) {
-      // Already showing — bump count, keep timer running
-      newBannerCount.textContent = String(_pendingCount);
-      return;
-    }
-    newBannerCount.textContent = String(_pendingCount);
-    newBanner.classList.add('visible');
-    _bannerVisible = true;
-    clearTimeout(_bannerDismissTimer);
-    _bannerDismissTimer = setTimeout(dismissBanner, 4000);
-  }, 800);
+/**
+ * Render the banner — strict guard.
+ * @param {number} newArticlesCount
+ */
+function renderBanner(newArticlesCount) {
+  // Rule 1 + root-cause guard: never render anything when count is non-positive.
+  const count = Number(newArticlesCount) || 0;
+  if (count <= 0) {
+    hideBanner();
+    return;
+  }
+  if (!newBanner || !newBannerCount) return;
+
+  newBannerCount.textContent = String(count);
+  newBanner.classList.add('visible');
+  clearTimeout(_bannerDismissTimer);
+  _bannerDismissTimer = setTimeout(hideBanner, 4000);
+}
+
+/**
+ * Called once per refresh cycle, after all loaders settle.
+ * Emits the banner exactly once for that batch (or not at all if count is 0).
+ */
+function commitNewArticleBanner() {
+  const count = _pendingNewArticleCount;
+  _pendingNewArticleCount = 0;   // reset BEFORE render so a second call is a no-op
+  renderBanner(count);
 }
 
 if (newBanner) {
   newBanner.addEventListener('click', function (e) {
-    if (e.target.closest('#newBannerClose')) {
-      e.stopPropagation();
-      dismissBanner();
-      return;
+    // Both × and the banner body dismiss; banner body also scrolls to top.
+    if (!e.target.closest('#newBannerClose')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    dismissBanner();
+    hideBanner();
   });
 }
+
+// Rule 2: explicit hide on mount, in case the element somehow inherited `.visible`.
+hideBanner();
 
 // ---- Browser notifications (background-tab alerts) ----
 
@@ -531,6 +544,10 @@ async function refreshFeeds(opts) {
     refreshBtn.style.transform = 'rotate(360deg)';
     setTimeout(function () { refreshBtn.style.transition = 'none'; refreshBtn.style.transform = 'rotate(0deg)'; }, 650);
   }
+
+  // Reset the per-cycle accumulator before any loader runs.
+  _pendingNewArticleCount = 0;
+
   await Promise.all([
     loadDevNews({ fresh: fresh, silent: silent }),
     loadGithubTrending({ fresh: fresh, silent: silent }),
@@ -538,6 +555,9 @@ async function refreshFeeds(opts) {
     loadAINews({ fresh: fresh, silent: silent }),
     loadSecurityNews({ fresh: fresh, silent: silent }),
   ]);
+
+  // Show banner exactly once for this cycle — the function guards count <= 0.
+  commitNewArticleBanner();
 }
 
 if (refreshBtn) {
