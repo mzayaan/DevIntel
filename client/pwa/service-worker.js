@@ -1,5 +1,5 @@
-const STATIC_CACHE = 'devintel-static-v3';
-const DYNAMIC_CACHE = 'devintel-api-v3';
+const STATIC_CACHE = 'devintel-static-v4';
+const DYNAMIC_CACHE = 'devintel-api-v4';
 const ALL_CACHES = [STATIC_CACHE, DYNAMIC_CACHE];
 
 const urlsToCache = [
@@ -10,7 +10,14 @@ const urlsToCache = [
   '/js/api.js',
   '/js/ui.js',
   '/js/app.js',
+  '/icons/icon-72.png',
+  '/icons/icon-96.png',
+  '/icons/icon-128.png',
+  '/icons/icon-144.png',
+  '/icons/icon-152.png',
+  '/icons/icon-180.png',
   '/icons/icon-192.png',
+  '/icons/icon-384.png',
   '/icons/icon-512.png',
 ];
 

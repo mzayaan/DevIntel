@@ -5,17 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="DevIntel — minimal developer news aggregator. Dev.to, GitHub trending, Hacker News, AI & security feeds in one place.">
-  <meta name="theme-color" content="#0b0f17">
+  <meta name="theme-color" content="#f59e0b">
   <meta name="color-scheme" content="dark light">
   <meta property="og:title" content="DevIntel — Developer News">
   <meta property="og:description" content="Curated developer news, trending repositories, and AI/security updates.">
   <meta property="og:type" content="website">
 
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DevIntel">
+
   <title>DevIntel — Developer News</title>
 
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -117,7 +125,7 @@
     <main id="mainContent" class="flex-1 min-w-0">
 
       <!-- HEADER -->
-      <header class="sticky top-0 z-20 hidden md:block" style="background: rgba(11,15,23,0.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);">
+      <header class="sticky top-0 z-20 hidden md:block app-header">
         <div class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
           <h1 class="text-base font-semibold tracking-tight" style="color: var(--text);">DEVINTEL</h1>
           <span class="text-xs" style="color: var(--muted);">— developer news, distilled</span>
@@ -242,6 +250,9 @@
   <div id="newBanner" class="new-banner" role="status" aria-live="polite">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
     <span><span id="newBannerCount">0</span> new articles — tap to scroll up</span>
+    <button id="newBannerClose" type="button" aria-label="Dismiss" class="new-banner-close">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
   </div>
 
   <!-- Notifications drawer -->

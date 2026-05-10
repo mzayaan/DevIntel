@@ -10,29 +10,39 @@
    Dark-first.
    ======================================== */
 :root {
-  --bg:        #f6f7f9;
-  --surface:   #ffffff;
-  --surface-2: #f1f3f6;
-  --border:    #e5e7eb;
-  --text:      #0f172a;
-  --muted:     #64748b;
-  --accent:    #d97706;   /* amber-600 — slightly muted */
-  --accent-2:  #f59e0b;
-  --accent-fg: #ffffff;
-  --danger:    #dc2626;
-  --success:   #16a34a;
+  /* Light mode — warm off-white with white cards on soft shadow.
+     Accent stays consistent across modes. */
+  --bg:         #f8f7f4;
+  --surface:    #ffffff;
+  --surface-2:  #f1efea;
+  --border:     transparent;        /* cards rely on shadow, not borders */
+  --border-soft:#ece9e2;            /* used for headers/footers/dividers */
+  --text:       #1a1a1a;
+  --muted:      #555555;
+  --accent:     #d97706;            /* amber-600 — same family in both modes */
+  --accent-2:   #f59e0b;
+  --accent-fg:  #ffffff;
+  --danger:     #b91c1c;
+  --success:    #15803d;
+  --shadow-sm:  0 1px 2px rgba(20, 16, 8, 0.04);
+  --shadow-md:  0 4px 14px -4px rgba(20, 16, 8, 0.08), 0 1px 3px rgba(20, 16, 8, 0.04);
+  --shadow-lg:  0 12px 32px -10px rgba(20, 16, 8, 0.12), 0 2px 6px rgba(20, 16, 8, 0.05);
 }
 
 .dark {
-  --bg:        #0b0f17;
-  --surface:   #131a26;
-  --surface-2: #1a2230;
-  --border:    #1f2937;
-  --text:      #e5e7eb;
-  --muted:     #94a3b8;
-  --accent:    #f59e0b;
-  --accent-2:  #fbbf24;
-  --accent-fg: #0b0f17;
+  --bg:         #0b0f17;
+  --surface:    #131a26;
+  --surface-2:  #1a2230;
+  --border:     #1f2937;
+  --border-soft:#1f2937;
+  --text:       #e5e7eb;
+  --muted:      #94a3b8;
+  --accent:     #f59e0b;
+  --accent-2:   #fbbf24;
+  --accent-fg:  #0b0f17;
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 14px -4px rgba(0, 0, 0, 0.45);
+  --shadow-lg:  0 12px 32px -10px rgba(0, 0, 0, 0.6);
 }
 
 /* ========================================
@@ -96,9 +106,10 @@
     @apply px-3 py-1.5 rounded-full text-xs font-medium;
     background: var(--surface);
     color: var(--muted);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-soft);
     transition: all .15s;
     cursor: pointer;
+    box-shadow: var(--shadow-sm);
   }
   .filter-pill:hover {
     color: var(--text);
@@ -122,13 +133,13 @@
     position: relative;
     opacity: 0;
     animation: card-in .45s cubic-bezier(.2,.7,.2,1) forwards;
+    box-shadow: var(--shadow-sm);
   }
   .cyber-card:hover {
     transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.18);
+    box-shadow: var(--shadow-lg);
   }
-  .dark .cyber-card:hover { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+  .dark .cyber-card:hover { border-color: var(--accent); }
 
   /* Section type accent (subtle left bar only) */
   .cyber-card.news,
@@ -157,7 +168,7 @@
   }
   .cyber-card-footer {
     @apply flex items-center justify-between pt-3 mt-auto;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-soft);
   }
 
   .meta-row {
@@ -181,16 +192,19 @@
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium;
     background: var(--surface-2);
     color: var(--muted);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-soft);
   }
 
   /* Card action buttons */
   .card-link {
-    @apply text-sm font-medium px-3 py-1.5 rounded-md;
+    @apply text-sm font-medium px-3 py-1.5 rounded-md -ml-3;
     color: var(--accent);
-    transition: background-color .15s;
+    transition: background-color .15s, color .15s;
   }
-  .card-link:hover { background: var(--surface-2); }
+  .card-link:hover {
+    background: var(--surface-2);
+    color: var(--accent-2);
+  }
 
   .save-btn {
     @apply inline-flex items-center justify-center w-8 h-8 rounded-md;
@@ -265,6 +279,19 @@
     gap: 0.5rem;
   }
   .new-banner.visible { transform: translateX(-50%) translateY(0); }
+  .new-banner-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    margin-left: 4px;
+    color: var(--accent-fg);
+    background: rgba(0,0,0,0.18);
+    transition: background-color .15s;
+  }
+  .new-banner-close:hover { background: rgba(0,0,0,0.32); }
 
   /* --- Bell badge --- */
   .bell-badge {
@@ -438,6 +465,18 @@ html { scroll-behavior: smooth; }
     padding-right: 0.5rem;
     gap: 0;
   }
+}
+
+/* App header — translucent over both modes */
+.app-header {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-soft);
+}
+.dark .app-header {
+  background: rgba(11, 15, 23, 0.78);
+  border-bottom-color: var(--border);
 }
 
 /* Sidebar nav item */

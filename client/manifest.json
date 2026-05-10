@@ -1,61 +1,40 @@
 {
-  "name": "DevIntel - Developer News Aggregator",
+  "name": "DevIntel",
   "short_name": "DevIntel",
-  "description": "Your personal developer news aggregator with trending repositories, AI news, and security updates",
+  "description": "Developer news aggregator — Dev.to, GitHub trending, Hacker News, AI & security feeds.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0f172a",
-  "theme_color": "#06b6d4",
+  "background_color": "#0f1117",
+  "theme_color": "#f59e0b",
   "categories": ["productivity", "news"],
   "lang": "en",
   "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "icons/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
     {
-      "name": "Search Tech",
+      "name": "Search",
       "short_name": "Search",
-      "description": "Search for technology articles",
+      "description": "Search developer news",
       "url": "/?shortcut=search",
-      "icons": [
-        {
-          "src": "icons/search-icon.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "icons/search-icon.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
-      "name": "Bookmarks",
-      "short_name": "Bookmarks",
-      "description": "View your saved articles",
+      "name": "Saved",
+      "short_name": "Saved",
+      "description": "View saved articles",
       "url": "/?shortcut=bookmarks",
-      "icons": [
-        {
-          "src": "icons/bookmark-icon.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "icons/bookmark-icon.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

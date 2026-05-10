@@ -66,7 +66,7 @@ function handleFeedLoaded(section, articles, opts) {
 
   if (freshlyNew.length > 0) {
     pushNewArticleNotifications(section, freshlyNew);
-    showNewBanner(freshlyNew.length);
+    queueNewBanner(freshlyNew.length);
     maybeBrowserNotify(freshlyNew);
   }
 
@@ -269,6 +269,30 @@ function toggleBookmark(encodedTitle, encodedUrl) {
   }
 }
 
+// Event delegation — captures clicks from any save-btn anywhere on the page.
+// Robust against titles containing apostrophes (which broke inline onclick).
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('[data-action="toggle-bookmark"]');
+  if (!btn) return;
+  e.preventDefault();
+  const payload = btn.getAttribute('data-url') || '';
+  const sep = payload.indexOf('|');
+  if (sep < 0) return;
+  const encTitle = payload.slice(0, sep);
+  const encUrl   = payload.slice(sep + 1);
+
+  // Optimistic UI: flip icon + aria-pressed instantly, before any re-render.
+  let url; try { url = decodeURIComponent(encUrl); } catch (_) { url = ''; }
+  const willBeSaved = !isBookmarked(url);
+  btn.classList.toggle('saved', willBeSaved);
+  btn.setAttribute('aria-pressed', String(willBeSaved));
+  btn.setAttribute('aria-label', willBeSaved ? 'Remove bookmark' : 'Save article');
+  btn.setAttribute('title',      willBeSaved ? 'Remove bookmark' : 'Save article');
+  btn.innerHTML = starSvg(willBeSaved);
+
+  toggleBookmark(encTitle, encUrl);
+});
+
 function loadBookmarks() {
   const container = document.getElementById('bookmarkContainer');
   if (!container) return;
@@ -411,24 +435,54 @@ if (notifList) {
 }
 
 // ---- New-articles floating banner ----
+// Aggregates counts across a polling cycle, shows ONCE for 4s, then dismissed.
+// Will not re-appear until the NEXT batch of truly-new articles arrives.
 
 const newBanner      = document.getElementById('newBanner');
 const newBannerCount = document.getElementById('newBannerCount');
+const newBannerClose = document.getElementById('newBannerClose');
 
-let bannerTimer = null;
-function showNewBanner(count) {
-  if (!newBanner || !newBannerCount) return;
-  newBannerCount.textContent = String(count);
-  newBanner.classList.add('visible');
-  clearTimeout(bannerTimer);
-  bannerTimer = setTimeout(function () {
-    newBanner.classList.remove('visible');
-  }, 8000);
+let _bannerVisible = false;
+let _bannerDismissTimer = null;
+let _bannerAggregateTimer = null;
+let _pendingCount = 0;
+
+function dismissBanner() {
+  if (!newBanner) return;
+  newBanner.classList.remove('visible');
+  _bannerVisible = false;
+  _pendingCount = 0;
+  clearTimeout(_bannerDismissTimer);
 }
+
+function queueNewBanner(count) {
+  _pendingCount += count;
+  // Aggregate counts arriving in the same polling cycle (within 800ms).
+  clearTimeout(_bannerAggregateTimer);
+  _bannerAggregateTimer = setTimeout(function () {
+    if (_pendingCount === 0 || !newBanner || !newBannerCount) return;
+    if (_bannerVisible) {
+      // Already showing — bump count, keep timer running
+      newBannerCount.textContent = String(_pendingCount);
+      return;
+    }
+    newBannerCount.textContent = String(_pendingCount);
+    newBanner.classList.add('visible');
+    _bannerVisible = true;
+    clearTimeout(_bannerDismissTimer);
+    _bannerDismissTimer = setTimeout(dismissBanner, 4000);
+  }, 800);
+}
+
 if (newBanner) {
-  newBanner.addEventListener('click', function () {
+  newBanner.addEventListener('click', function (e) {
+    if (e.target.closest('#newBannerClose')) {
+      e.stopPropagation();
+      dismissBanner();
+      return;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    newBanner.classList.remove('visible');
+    dismissBanner();
   });
 }
 

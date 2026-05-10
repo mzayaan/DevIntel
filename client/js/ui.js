@@ -72,10 +72,6 @@ function createCard(title, description, url, extra, type) {
   const saved = isBookmarked(url);
   const savedClass = saved ? ' saved' : '';
   const savedLabel = saved ? 'Remove bookmark' : 'Save article';
-  // Star icon: filled if saved, outlined otherwise
-  const starIcon = saved
-    ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>'
-    : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>';
 
   return '<article class="cyber-card ' + escapeHTML(type) + '" data-url="' + safeUrl + '">' +
       (extra ? '<div class="meta-row">' + extra + '</div>' : '') +
@@ -84,10 +80,20 @@ function createCard(title, description, url, extra, type) {
       '<div class="cyber-card-footer">' +
         '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Read: ' + safeTitle + '">Read →</a>' +
         '<button type="button" class="save-btn' + savedClass + '"' +
-          ' onclick="toggleBookmark(\'' + encTitle + '\',\'' + encUrl + '\')"' +
-          ' aria-label="' + savedLabel + '" title="' + savedLabel + '">' + starIcon + '</button>' +
+          ' data-action="toggle-bookmark"' +
+          ' data-url="' + encTitle + '|' + encUrl + '"' +
+          ' aria-pressed="' + saved + '"' +
+          ' aria-label="' + savedLabel + '" title="' + savedLabel + '">' +
+          starSvg(saved) +
+        '</button>' +
       '</div>' +
     '</article>';
+}
+
+function starSvg(filled) {
+  return filled
+    ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>';
 }
 
 function showError(containerId, message) {
@@ -181,7 +187,7 @@ setInterval(refreshRelativeLabel, 15000);
 // CommonJS export — no-op in browser
 if (typeof module !== 'undefined') {
   module.exports = {
-    debounce, escapeHTML, isValidURL, isBookmarked,
+    debounce, escapeHTML, isValidURL, isBookmarked, starSvg,
     showSkeleton, createCard, showError, showEmpty,
     showNotification, updateRefreshTime, staggerCards,
   };
