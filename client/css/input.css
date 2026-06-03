@@ -731,3 +731,86 @@ body.ad-banner-active .max-w-6xl.mx-auto {
   text-align: center;
 }
 .btn-subtle:hover { color: var(--text); border-color: var(--muted); }
+
+/* ========================================
+   IAP DIALOG
+   ======================================== */
+
+.iap-dialog {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow-lg);
+}
+.iap-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.iap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.iap-subtitle {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.iap-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.iap-benefits li {
+  font-size: 0.82rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.iap-buy-btn {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-bottom: 0.5rem;
+}
+.iap-buy-btn:hover  { opacity: 0.9; }
+.iap-buy-btn:disabled { opacity: 0.5; cursor: default; }
+.iap-restore-btn {
+  width: 100%;
+  padding: 0.4rem;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-bottom: 0.25rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.iap-restore-btn:hover { opacity: 0.8; }
+
+/* Purchased state for sidebar button */
+#removeAdsBtn.iap-purchased {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 0.8;
+  cursor: default;
+}

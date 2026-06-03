@@ -10,6 +10,10 @@ const CONFIG = {
   // (https://adsense.google.com/start) after account approval.
   // Publisher ID format: ca-pub-XXXXXXXXXXXXXXXX
   // Ad unit slot IDs: 10-digit numbers from each ad unit you create.
+  IAP: {
+    PRODUCT_ID: 'remove_ads',   // must match the product ID in Google Play Console
+  },
+
   ADS: {
     ENABLED: true,
     PUBLISHER_ID: 'ca-pub-XXXXXXXXXXXXXXXX',

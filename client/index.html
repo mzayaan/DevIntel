@@ -128,8 +128,12 @@
           &#9889; <span class="sidebar-label">Offline for 24h</span>
         </button>
         <button id="removeAdsBtn" class="btn-subtle" aria-label="Remove ads"
-                onclick="if(window.ADS) ADS.toggleRemoveAds()">
+                onclick="if(window.ADS) ADS.initiateIAP()">
           <span class="sidebar-label">Remove Ads</span>
+        </button>
+        <button id="restorePurchaseBtn" class="btn-subtle" aria-label="Restore purchase"
+                onclick="if(window.ADS) ADS.restorePurchase()">
+          <span class="sidebar-label">Restore Purchase</span>
         </button>
       </div>
     </aside>
