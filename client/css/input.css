@@ -527,3 +527,207 @@ html { scroll-behavior: smooth; }
   -ms-overflow-style: none;      /* IE/Edge */
 }
 .filter-scroll::-webkit-scrollbar { display: none; }
+
+/* ========================================
+   ADS
+   ======================================== */
+
+/* In-feed ad card — same visual chrome as .cyber-card */
+.ad-card {
+  opacity: 1 !important;
+  animation: none !important;
+  min-height: 300px;
+  overflow: hidden;
+}
+.ad-infeed-ins { min-height: 250px; width: 100%; }
+
+/* "Ad" pill label */
+.ad-label {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: var(--border);
+  color: var(--muted);
+  user-select: none;
+}
+
+/* Fixed bottom banner wrapper */
+.ad-banner-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 767px) {
+  /* sit above the 56px mobile bottom nav */
+  .ad-banner-wrapper { bottom: 56px; }
+}
+
+/* Add breathing room below content when banner is visible */
+body.ad-banner-active .max-w-6xl.mx-auto {
+  padding-bottom: 5rem;
+}
+@media (max-width: 767px) {
+  body.ad-banner-active .max-w-6xl.mx-auto {
+    /* content + bottom nav (56px) + banner (~55px) + gap */
+    padding-bottom: 9rem;
+  }
+}
+
+/* GDPR consent bar */
+.ad-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ad-consent-text {
+  flex: 1;
+  font-size: 0.78rem;
+  color: var(--muted);
+  min-width: 180px;
+}
+.ad-consent-link { color: var(--accent); }
+.ad-consent-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.ad-consent-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.ad-consent-btn:hover { opacity: 0.85; }
+.ad-consent-btn.accept  { background: var(--accent); color: var(--accent-fg); }
+.ad-consent-btn.decline { background: var(--border);  color: var(--muted); }
+
+/* Interstitial / rewarded overlay */
+.ad-interstitial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.ad-interstitial-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: var(--shadow-lg);
+}
+.ad-interstitial-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.ad-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--muted);
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.ad-close-btn:hover { color: var(--text); }
+.ad-timer {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.ad-rewarded-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.625rem;
+}
+.ad-claim-btn {
+  margin-top: 0.625rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: none;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.ad-claim-btn:hover { opacity: 0.9; }
+.ad-claim-btn.hidden { display: none; }
+.ad-cancel-btn {
+  margin-top: 0.375rem;
+  width: 100%;
+  padding: 0.35rem;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.ad-cancel-btn:hover { color: var(--text); }
+
+/* Offline unlock badge (amber) */
+.offline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.15rem 0.5rem;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.offline-badge.hidden { display: none; }
+
+/* Sidebar ad-utility buttons */
+.btn-subtle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  text-align: center;
+}
+.btn-subtle:hover { color: var(--text); border-color: var(--muted); }

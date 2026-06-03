@@ -123,6 +123,14 @@
         <button id="installBtn" class="btn btn-primary w-full hidden" aria-label="Install app">
           <span class="sidebar-label">Install App</span>
         </button>
+        <button id="rewardedAdBtn" class="btn-subtle" aria-label="Watch ad for offline access"
+                onclick="if(window.ADS) ADS.offerRewardedAd()">
+          &#9889; <span class="sidebar-label">Offline for 24h</span>
+        </button>
+        <button id="removeAdsBtn" class="btn-subtle" aria-label="Remove ads"
+                onclick="if(window.ADS) ADS.toggleRemoveAds()">
+          <span class="sidebar-label">Remove Ads</span>
+        </button>
       </div>
     </aside>
 
@@ -135,6 +143,8 @@
           <h1 class="text-base font-semibold tracking-tight" style="color: var(--text);">DEVINTEL</h1>
           <span class="text-xs" style="color: var(--muted);">— developer news, distilled</span>
           <div class="flex-1"></div>
+
+          <span id="offlineUnlockBadge" class="offline-badge hidden" title="Offline access active">&#9889; Offline &#10003;</span>
 
           <div class="text-xs flex items-center gap-2" style="color: var(--muted);">
             <span class="inline-block w-1.5 h-1.5 rounded-full" style="background: var(--success);"></span>
@@ -301,10 +311,15 @@
     </a>
   </nav>
 
+  <!-- Bottom banner ad — sits above the mobile nav bar -->
+  <div id="adBannerContainer" class="ad-banner-wrapper hidden"
+       role="complementary" aria-label="Advertisement"></div>
+
   <!-- Scripts (load order matters — no bundler) -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/ads.js"></script>
   <script src="js/app.js" defer></script>
 
 </body>

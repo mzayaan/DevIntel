@@ -97,6 +97,7 @@ function renderFeed(section, containerId) {
   }).join('');
   container.innerHTML = html;
   staggerCards(containerId);
+  if (window.ADS) ADS.injectFeedAds(containerId);
 }
 
 function cardForArticle(a, section) {
@@ -268,6 +269,14 @@ function toggleBookmark(encodedTitle, encodedUrl) {
     showNotification('Failed', 'error');
   }
 }
+
+// Track "Read →" clicks for interstitial pacing.
+document.addEventListener('click', function (e) {
+  if (e.target.closest('.card-link') && window.ADS) {
+    ADS.trackArticleOpen();
+    ADS.maybeShowInterstitial();
+  }
+});
 
 // Event delegation — captures clicks from any save-btn anywhere on the page.
 // Robust against titles containing apostrophes (which broke inline onclick).
@@ -670,7 +679,7 @@ window.addEventListener('appinstalled', function () { showNotification('App inst
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('pwa/service-worker.js').then(function (reg) {
+    navigator.serviceWorker.register('pwa/service-worker.js', { scope: '/' }).then(function (reg) {
       document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') reg.update();
       });
@@ -689,4 +698,5 @@ document.addEventListener('DOMContentLoaded', function () {
   loadAnalytics();
   renderNotifications();
   updateRefreshTime();
+  if (window.ADS) ADS.init();
 });
