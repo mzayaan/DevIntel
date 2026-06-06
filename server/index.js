@@ -82,7 +82,7 @@ app.get('/.well-known/assetlinks.json', (req, res) => {
     relation: ['delegate_permission/common.handle_all_urls'],
     target: {
       namespace: 'android_app',
-      package_name: 'com.devintel.app',
+      package_name: 'com.onrender.devintel_v4qu.twa',
       sha256_cert_fingerprints: [process.env.ANDROID_CERT_FINGERPRINT || 'FILL_IN_SHA256_FINGERPRINT'],
     },
   }]);
