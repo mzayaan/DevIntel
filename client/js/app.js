@@ -50,6 +50,17 @@ function isNew(publishedAt) {
   return (Date.now() - t) < CONFIG.NEW_ARTICLE_WINDOW;
 }
 
+/**
+ * GitHub trending repos don't have a meaningful "publish" time (their
+ * created_at is often years old) — what actually matters there is whether
+ * this repo is new to the trending list, which `state.seen` (first time this
+ * browser observed the URL) already tracks for the notification system.
+ */
+function isNewToTrending(url) {
+  const t = state.seen[url];
+  return !!t && (Date.now() - t) < CONFIG.NEW_ARTICLE_WINDOW;
+}
+
 // ---- Feed loaded handler (called by api.js) ----
 
 function handleFeedLoaded(section, articles, opts) {
@@ -108,7 +119,8 @@ function renderFeed(section, containerId) {
 
 function cardForArticle(a, section) {
   const meta = [];
-  if (isNew(a.publishedAt)) meta.push('<span class="new-badge">NEW</span>');
+  const flaggedNew = a.source === 'GitHub' ? isNewToTrending(a.url) : isNew(a.publishedAt);
+  if (flaggedNew) meta.push('<span class="new-badge">NEW</span>');
   meta.push('<span class="source-badge">' + escapeHTML(a.source || section) + '</span>');
   if (typeof a.stars === 'number') meta.push('<span class="source-badge">★ ' + a.stars.toLocaleString() + '</span>');
   if (a.language)                  meta.push('<span class="source-badge">' + escapeHTML(a.language) + '</span>');
