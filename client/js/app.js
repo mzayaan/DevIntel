@@ -66,7 +66,6 @@ function handleFeedLoaded(section, articles, opts) {
 
   if (freshlyNew.length > 0) {
     pushNewArticleNotifications(section, freshlyNew);
-    _pendingNewArticleCount += freshlyNew.length;
     maybeBrowserNotify(freshlyNew);
   }
 
@@ -349,6 +348,7 @@ const notifDrawer   = document.getElementById('notifDrawer');
 const drawerOverlay = document.getElementById('drawerOverlay');
 const closeDrawer   = document.getElementById('closeDrawer');
 const markAllRead   = document.getElementById('markAllRead');
+const clearNotifs   = document.getElementById('clearNotifs');
 const notifList     = document.getElementById('notifList');
 
 function pushNewArticleNotifications(section, articles) {
@@ -444,6 +444,13 @@ if (markAllRead) {
     renderNotifications();
   });
 }
+if (clearNotifs) {
+  clearNotifs.addEventListener('click', function () {
+    state.notifications = [];
+    state.unread = 0;
+    renderNotifications();
+  });
+}
 if (notifList) {
   notifList.addEventListener('click', function (e) {
     const item = e.target.closest('.notif-item');
@@ -455,71 +462,6 @@ if (notifList) {
     if (url) window.open(url, '_blank', 'noopener,noreferrer');
   });
 }
-
-// ---- New-articles floating banner ----
-//
-// Strict rules:
-//   1. ONLY shown when newArticlesCount > 0.
-//   2. Hidden on initial mount and immediately if count is 0/null/undefined.
-//   3. Auto-dismissed after 4s; instantly on × click or banner-body click.
-//   4. Shown ONCE per refresh cycle (one per fetch that returned new content).
-//   5. Re-show requires the NEXT refresh cycle to add genuinely-new article URLs
-//      that weren't in `state.seen` already.
-
-const newBanner      = document.getElementById('newBanner');
-const newBannerCount = document.getElementById('newBannerCount');
-
-let _pendingNewArticleCount = 0;   // accumulator for the current refresh cycle
-let _bannerDismissTimer = null;
-
-function hideBanner() {
-  if (!newBanner) return;
-  newBanner.classList.remove('visible');
-  clearTimeout(_bannerDismissTimer);
-  _bannerDismissTimer = null;
-}
-
-/**
- * Render the banner — strict guard.
- * @param {number} newArticlesCount
- */
-function renderBanner(newArticlesCount) {
-  // Rule 1 + root-cause guard: never render anything when count is non-positive.
-  const count = Number(newArticlesCount) || 0;
-  if (count <= 0) {
-    hideBanner();
-    return;
-  }
-  if (!newBanner || !newBannerCount) return;
-
-  newBannerCount.textContent = String(count);
-  newBanner.classList.add('visible');
-  clearTimeout(_bannerDismissTimer);
-  _bannerDismissTimer = setTimeout(hideBanner, 4000);
-}
-
-/**
- * Called once per refresh cycle, after all loaders settle.
- * Emits the banner exactly once for that batch (or not at all if count is 0).
- */
-function commitNewArticleBanner() {
-  const count = _pendingNewArticleCount;
-  _pendingNewArticleCount = 0;   // reset BEFORE render so a second call is a no-op
-  renderBanner(count);
-}
-
-if (newBanner) {
-  newBanner.addEventListener('click', function (e) {
-    // Both × and the banner body dismiss; banner body also scrolls to top.
-    if (!e.target.closest('#newBannerClose')) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    hideBanner();
-  });
-}
-
-// Rule 2: explicit hide on mount, in case the element somehow inherited `.visible`.
-hideBanner();
 
 // ---- Browser notifications (background-tab alerts) ----
 
@@ -557,11 +499,10 @@ function maybeBrowserNotify(articles) {
 
 const refreshBtn = document.getElementById('refreshBtn');
 
-// `_pendingNewArticleCount` is a single shared accumulator. Two overlapping
-// refreshFeeds() calls (e.g. a manual click racing the background poll) would
-// otherwise stomp on each other's counts — one cycle's reset-to-0 wiping out
-// another cycle's in-flight increments — producing wrong/duplicate banners.
-// Serialize: a refresh already in flight makes a concurrent call a no-op.
+// Two overlapping refreshFeeds() calls (e.g. a manual click racing the
+// background poll) would otherwise interleave and process the same fetch
+// cycle inconsistently. Serialize: a refresh already in flight makes a
+// concurrent call a no-op.
 let _refreshInFlight = false;
 
 async function refreshFeeds(opts) {
@@ -577,9 +518,6 @@ async function refreshFeeds(opts) {
     setTimeout(function () { refreshBtn.style.transition = 'none'; refreshBtn.style.transform = 'rotate(0deg)'; }, 650);
   }
 
-  // Reset the per-cycle accumulator before any loader runs.
-  _pendingNewArticleCount = 0;
-
   try {
     await Promise.all([
       loadDevNews({ fresh: fresh, silent: silent }),
@@ -588,9 +526,6 @@ async function refreshFeeds(opts) {
       loadAINews({ fresh: fresh, silent: silent }),
       loadSecurityNews({ fresh: fresh, silent: silent }),
     ]);
-
-    // Show banner exactly once for this cycle — the function guards count <= 0.
-    commitNewArticleBanner();
   } finally {
     _refreshInFlight = false;
   }

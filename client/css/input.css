@@ -252,41 +252,6 @@
     to   { transform: translateY(0);    opacity: 1; }
   }
 
-  /* --- New-articles floating banner --- */
-  .new-banner {
-    position: fixed;
-    top: 5rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(-150%);
-    padding: 0.625rem 1rem;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--accent-fg);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    box-shadow: 0 8px 24px -6px rgba(245,158,11,0.5);
-    cursor: pointer;
-    z-index: 60;
-    transition: transform .35s cubic-bezier(.2,.7,.2,1);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .new-banner.visible { transform: translateX(-50%) translateY(0); }
-  .new-banner-close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 999px;
-    margin-left: 4px;
-    color: var(--accent-fg);
-    background: rgba(0,0,0,0.18);
-    transition: background-color .15s;
-  }
-  .new-banner-close:hover { background: rgba(0,0,0,0.32); }
-
   /* --- Bell badge --- */
   .bell-badge {
     position: absolute;

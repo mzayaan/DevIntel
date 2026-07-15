@@ -269,15 +269,6 @@
     </main>
   </div>
 
-  <!-- New articles toast banner -->
-  <div id="newBanner" class="new-banner" role="status" aria-live="polite">
-    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-    <span><span id="newBannerCount">0</span> new articles — tap to scroll up</span>
-    <button id="newBannerClose" type="button" aria-label="Dismiss" class="new-banner-close">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-
   <!-- Notifications drawer -->
   <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
   <aside id="notifDrawer" class="drawer" aria-label="Notifications" aria-hidden="true">
@@ -285,6 +276,7 @@
       <h3 class="font-semibold">Notifications</h3>
       <div class="flex items-center gap-1">
         <button id="markAllRead" class="text-xs px-2 py-1 rounded hover:underline" style="color: var(--accent);">Mark all read</button>
+        <button id="clearNotifs" class="text-xs px-2 py-1 rounded hover:underline" style="color: var(--muted);">Clear all</button>
         <button id="closeDrawer" class="btn-icon" aria-label="Close notifications">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
