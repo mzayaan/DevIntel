@@ -557,7 +557,17 @@ function maybeBrowserNotify(articles) {
 
 const refreshBtn = document.getElementById('refreshBtn');
 
+// `_pendingNewArticleCount` is a single shared accumulator. Two overlapping
+// refreshFeeds() calls (e.g. a manual click racing the background poll) would
+// otherwise stomp on each other's counts — one cycle's reset-to-0 wiping out
+// another cycle's in-flight increments — producing wrong/duplicate banners.
+// Serialize: a refresh already in flight makes a concurrent call a no-op.
+let _refreshInFlight = false;
+
 async function refreshFeeds(opts) {
+  if (_refreshInFlight) return;
+  _refreshInFlight = true;
+
   opts = opts || {};
   const fresh = !!opts.fresh;
   const silent = !!opts.silent;
@@ -570,16 +580,20 @@ async function refreshFeeds(opts) {
   // Reset the per-cycle accumulator before any loader runs.
   _pendingNewArticleCount = 0;
 
-  await Promise.all([
-    loadDevNews({ fresh: fresh, silent: silent }),
-    loadGithubTrending({ fresh: fresh, silent: silent }),
-    loadHackerNews({ fresh: fresh, silent: silent }),
-    loadAINews({ fresh: fresh, silent: silent }),
-    loadSecurityNews({ fresh: fresh, silent: silent }),
-  ]);
+  try {
+    await Promise.all([
+      loadDevNews({ fresh: fresh, silent: silent }),
+      loadGithubTrending({ fresh: fresh, silent: silent }),
+      loadHackerNews({ fresh: fresh, silent: silent }),
+      loadAINews({ fresh: fresh, silent: silent }),
+      loadSecurityNews({ fresh: fresh, silent: silent }),
+    ]);
 
-  // Show banner exactly once for this cycle — the function guards count <= 0.
-  commitNewArticleBanner();
+    // Show banner exactly once for this cycle — the function guards count <= 0.
+    commitNewArticleBanner();
+  } finally {
+    _refreshInFlight = false;
+  }
 }
 
 if (refreshBtn) {
