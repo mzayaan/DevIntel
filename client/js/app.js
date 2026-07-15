@@ -37,9 +37,17 @@ function persistSeen() {
   } catch (_) {}
 }
 
-function isNew(url) {
-  const t = state.seen[url];
-  return t && (Date.now() - t) < CONFIG.NEW_ARTICLE_WINDOW;
+/**
+ * True only when the article was actually published recently — based on the
+ * source's own publish timestamp, not on whether this browser happens to be
+ * seeing the URL for the first time (that would flag everything as "new" on
+ * a fresh session/cache-clear, regardless of how old the content really is).
+ */
+function isNew(publishedAt) {
+  if (!publishedAt) return false;
+  const t = typeof publishedAt === 'number' ? publishedAt : Date.parse(publishedAt);
+  if (!t || Number.isNaN(t)) return false;
+  return (Date.now() - t) < CONFIG.NEW_ARTICLE_WINDOW;
 }
 
 // ---- Feed loaded handler (called by api.js) ----
@@ -100,7 +108,7 @@ function renderFeed(section, containerId) {
 
 function cardForArticle(a, section) {
   const meta = [];
-  if (isNew(a.url)) meta.push('<span class="new-badge">NEW</span>');
+  if (isNew(a.publishedAt)) meta.push('<span class="new-badge">NEW</span>');
   meta.push('<span class="source-badge">' + escapeHTML(a.source || section) + '</span>');
   if (typeof a.stars === 'number') meta.push('<span class="source-badge">★ ' + a.stars.toLocaleString() + '</span>');
   if (a.language)                  meta.push('<span class="source-badge">' + escapeHTML(a.language) + '</span>');

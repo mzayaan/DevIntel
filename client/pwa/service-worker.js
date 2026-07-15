@@ -1,5 +1,5 @@
-const STATIC_CACHE = 'devintel-static-v8';
-const DYNAMIC_CACHE = 'devintel-api-v8';
+const STATIC_CACHE = 'devintel-static-v9';
+const DYNAMIC_CACHE = 'devintel-api-v9';
 const ALL_CACHES = [STATIC_CACHE, DYNAMIC_CACHE];
 
 const urlsToCache = [
