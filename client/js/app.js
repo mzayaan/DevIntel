@@ -97,7 +97,6 @@ function renderFeed(section, containerId) {
   }).join('');
   container.innerHTML = html;
   staggerCards(containerId);
-  if (window.ADS) ADS.injectFeedAds(containerId);
 }
 
 function cardForArticle(a, section) {
@@ -270,14 +269,6 @@ function toggleBookmark(encodedTitle, encodedUrl) {
   }
 }
 
-// Track "Read →" clicks for interstitial pacing.
-document.addEventListener('click', function (e) {
-  if (e.target.closest('.card-link') && window.ADS) {
-    ADS.trackArticleOpen();
-    ADS.maybeShowInterstitial();
-  }
-});
-
 // Event delegation — captures clicks from any save-btn anywhere on the page.
 // Robust against titles containing apostrophes (which broke inline onclick).
 document.addEventListener('click', function (e) {
@@ -380,9 +371,13 @@ function pushNewArticleNotifications(section, articles) {
 
 function _updateBellBadge(badge) {
   if (!badge) return;
+  const wasVisible = badge.classList.contains('visible');
   if (state.unread > 0) {
     badge.textContent = state.unread > 99 ? '99+' : String(state.unread);
     badge.classList.add('visible');
+    if (!wasVisible && window.anime && !prefersReducedMotion()) {
+      anime({ targets: badge, scale: [0, 1.15, 1], duration: 420, easing: 'easeOutElastic(1, .6)' });
+    }
   } else {
     badge.classList.remove('visible');
   }
@@ -406,6 +401,17 @@ function renderNotifications() {
         '</div>' +
       '</div>';
   }).join('');
+
+  if (hasAnime() && !prefersReducedMotion()) {
+    anime({
+      targets: notifList.querySelectorAll('.notif-item'),
+      opacity: [0, 1],
+      translateX: [16, 0],
+      duration: 350,
+      delay: anime.stagger(40),
+      easing: 'cubicBezier(.2,.7,.2,1)',
+    });
+  }
 }
 
 function relTime(ts) {
@@ -605,6 +611,12 @@ if (themeToggle) {
   themeToggle.addEventListener('click', function () {
     const current = localStorage.getItem('devintelTheme') || 'dark';
     applyTheme(current === 'dark' ? 'light' : 'dark');
+    if (hasAnime() && !prefersReducedMotion()) {
+      const icon = themeToggle.querySelector('svg');
+      if (icon) {
+        anime({ targets: icon, rotate: '1turn', duration: 500, easing: 'easeInOutQuad' });
+      }
+    }
   });
 }
 
@@ -679,14 +691,34 @@ window.addEventListener('appinstalled', function () { showNotification('App inst
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
+    // A controller already present at registration time means this tab was
+    // already under SW control — so a later controllerchange is a real update,
+    // not the first-ever install (which has no prior controller to replace).
+    const hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('pwa/service-worker.js', { scope: '/' }).then(function (reg) {
       document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') reg.update();
       });
       navigator.serviceWorker.addEventListener('controllerchange', function () {
-        showNotification('Update available — reload to get it', 'info');
+        if (hadController) showNotification('Update available — reload to get it', 'info');
       });
     }).catch(function () { /* offline-friendly: ignore */ });
+  });
+}
+
+// ---- Splash-style logo entrance ----
+
+function animateLogoEntrance() {
+  if (!hasAnime() || prefersReducedMotion()) return;
+  const logos = document.querySelectorAll('.app-logo-chip');
+  if (!logos.length) return;
+  anime({
+    targets: logos,
+    scale: [0.4, 1],
+    opacity: [0, 1],
+    duration: 600,
+    delay: anime.stagger(80),
+    easing: 'easeOutElastic(1, .7)',
   });
 }
 
@@ -698,5 +730,5 @@ document.addEventListener('DOMContentLoaded', function () {
   loadAnalytics();
   renderNotifications();
   updateRefreshTime();
-  if (window.ADS) ADS.init();
+  animateLogoEntrance();
 });

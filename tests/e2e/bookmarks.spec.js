@@ -51,7 +51,7 @@ test.describe('Bookmarks', () => {
     // Second save — should show info notification
     await page.evaluate(([t, u]) => saveBookmark(t, u), [title, url]);
 
-    const notif = page.locator('.notification.info');
+    const notif = page.locator('.notification.info', { hasText: 'bookmarked' });
     await expect(notif).toBeVisible({ timeout: 3000 });
     await expect(notif).toContainText('bookmarked');
   });

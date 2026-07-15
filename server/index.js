@@ -25,24 +25,11 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: [
-        "'self'", "'unsafe-inline'",           // inline mobile menu script
-        'https://pagead2.googlesyndication.com', // AdSense
-        'https://tpc.googlesyndication.com',
-        'https://adservice.google.com',
-      ],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'https:'],
-      connectSrc: [
-        "'self'",
-        'https://pagead2.googlesyndication.com', // AdSense reporting
-      ],
-      frameSrc: [
-        'https://googleads.g.doubleclick.net',  // Ad rendering iframes
-        'https://tpc.googlesyndication.com',
-        'https://www.google.com',
-      ],
+      connectSrc: ["'self'"],
     },
   },
   crossOriginEmbedderPolicy: false,
@@ -66,29 +53,13 @@ app.use('/api/hn',     hnRouter);
 
 const clientDir = path.join(__dirname, '..', 'client');
 
-// ---- TWA / Play Store requirements ----
 // Service worker must control scope '/' but lives in /pwa/ — expand allowed scope.
 app.get('/pwa/service-worker.js', (req, res) => {
   res.setHeader('Service-Worker-Allowed', '/');
   res.sendFile(path.join(clientDir, 'pwa', 'service-worker.js'));
 });
 
-// Digital Asset Links — required for TWA to run fullscreen (no browser UI bar).
-// Replace FILL_IN_SHA256_FINGERPRINT with the output of:
-//   keytool -list -v -keystore devintel-keystore.jks -alias devintel
-app.get('/.well-known/assetlinks.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.json([{
-    relation: ['delegate_permission/common.handle_all_urls'],
-    target: {
-      namespace: 'android_app',
-      package_name: 'com.onrender.devintel_v4qu.twa',
-      sha256_cert_fingerprints: [process.env.ANDROID_CERT_FINGERPRINT || 'FILL_IN_SHA256_FINGERPRINT'],
-    },
-  }]);
-});
-
-// Privacy policy (required by Google Play).
+// Privacy policy.
 app.get('/privacy', (req, res) => {
   res.sendFile(path.join(clientDir, 'privacy.html'));
 });

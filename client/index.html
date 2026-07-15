@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="DevIntel — minimal developer news aggregator. Dev.to, GitHub trending, Hacker News, AI & security feeds in one place.">
   <meta name="theme-color" content="#f59e0b">
   <meta name="color-scheme" content="dark light">
@@ -11,10 +11,11 @@
   <meta property="og:description" content="Curated developer news, trending repositories, and AI/security updates.">
   <meta property="og:type" content="website">
 
-  <!-- iOS PWA -->
+  <!-- iOS / macOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="DevIntel">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <title>DevIntel — Developer News</title>
 
@@ -24,6 +25,23 @@
   <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
   <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+
+  <!-- iOS splash screens (portrait) -->
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-se-8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-x-11pro.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-12-13-14.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-14pro-15-16.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-6-7-8-plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-11promax-xsmax.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-12-13-promax-14plus.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-iphone-14-15-16-promax.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-mini-air-97.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-102.png" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-air-109.png" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-pro-105.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-pro-11.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="icons/splash/splash-ipad-pro-129.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -38,10 +56,10 @@
   </a>
 
   <!-- MOBILE TOP BAR -->
-  <nav class="fixed top-0 left-0 right-0 z-40 md:hidden flex items-center justify-between px-4 h-14"
+  <nav id="mobileTopBar" class="fixed top-0 left-0 right-0 z-40 md:hidden flex items-center justify-between px-4 h-14"
        style="background: var(--surface); border-bottom: 1px solid var(--border);">
     <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--accent); color: var(--accent-fg);">
+      <div class="app-logo-chip w-7 h-7 rounded-md flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: var(--accent-fg);">
         <span class="font-bold text-sm">D</span>
       </div>
       <span class="font-semibold tracking-tight">DevIntel</span>
@@ -58,7 +76,7 @@
     </div>
   </nav>
 
-  <div class="flex min-h-screen pt-14 md:pt-0">
+  <div id="appShell" class="flex min-h-screen pt-14 md:pt-0">
 
     <!-- SIDEBAR (desktop/tablet only) -->
     <aside id="sidebar"
@@ -68,7 +86,7 @@
 
       <div class="flex items-center justify-between h-14 px-4" style="border-bottom: 1px solid var(--border);">
         <div class="sidebar-logo-text flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--accent); color: var(--accent-fg);">
+          <div class="app-logo-chip w-7 h-7 rounded-md flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: var(--accent-fg);">
             <span class="font-bold text-sm">D</span>
           </div>
           <span class="font-semibold tracking-tight">DevIntel</span>
@@ -123,18 +141,6 @@
         <button id="installBtn" class="btn btn-primary w-full hidden" aria-label="Install app">
           <span class="sidebar-label">Install App</span>
         </button>
-        <button id="rewardedAdBtn" class="btn-subtle" aria-label="Watch ad for offline access"
-                onclick="if(window.ADS) ADS.offerRewardedAd()">
-          &#9889; <span class="sidebar-label">Offline for 24h</span>
-        </button>
-        <button id="removeAdsBtn" class="btn-subtle" aria-label="Remove ads"
-                onclick="if(window.ADS) ADS.initiateIAP()">
-          <span class="sidebar-label">Remove Ads</span>
-        </button>
-        <button id="restorePurchaseBtn" class="btn-subtle" aria-label="Restore purchase"
-                onclick="if(window.ADS) ADS.restorePurchase()">
-          <span class="sidebar-label">Restore Purchase</span>
-        </button>
       </div>
     </aside>
 
@@ -147,8 +153,6 @@
           <h1 class="text-base font-semibold tracking-tight" style="color: var(--text);">DEVINTEL</h1>
           <span class="text-xs" style="color: var(--muted);">— developer news, distilled</span>
           <div class="flex-1"></div>
-
-          <span id="offlineUnlockBadge" class="offline-badge hidden" title="Offline access active">&#9889; Offline &#10003;</span>
 
           <div class="text-xs flex items-center gap-2" style="color: var(--muted);">
             <span class="inline-block w-1.5 h-1.5 rounded-full" style="background: var(--success);"></span>
@@ -181,7 +185,7 @@
                    aria-label="Search">
           </div>
 
-          <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6"></div>
+          <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6"></div>
         </section>
 
         <!-- DEV NEWS -->
@@ -200,7 +204,7 @@
               <button class="filter-pill flex-shrink-0" data-filter="devops">DevOps</button>
             </div>
           </div>
-          <div id="newsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="newsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- GITHUB -->
@@ -219,35 +223,35 @@
               <button class="filter-pill flex-shrink-0" data-filter="tensorflow">TensorFlow</button>
             </div>
           </div>
-          <div id="githubContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="githubContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- HACKER NEWS -->
         <section id="hnSection" class="scroll-mt-20">
           <h2 class="section-title">Hacker News</h2>
           <p class="section-sub">Top stories right now.</p>
-          <div id="hnContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="hnContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- AI -->
         <section id="aiSection" class="scroll-mt-20">
           <h2 class="section-title">AI &amp; Machine Learning</h2>
           <p class="section-sub">Research notes and applied ML reading.</p>
-          <div id="aiContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="aiContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- SECURITY -->
         <section id="securitySection" class="scroll-mt-20">
           <h2 class="section-title">Security</h2>
           <p class="section-sub">Vulnerabilities, advisories, defensive patterns.</p>
-          <div id="securityContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="securityContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- BOOKMARKS -->
         <section id="bookmarksSection" class="scroll-mt-20">
           <h2 class="section-title">Saved</h2>
           <p class="section-sub">Articles you've bookmarked.</p>
-          <div id="bookmarkContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="bookmarkContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- ANALYTICS -->
@@ -290,7 +294,7 @@
   </aside>
 
   <!-- BOTTOM NAV (mobile only) -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around h-16"
+  <nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around h-16"
        style="background: var(--surface); border-top: 1px solid var(--border);"
        aria-label="Mobile navigation">
     <a href="#searchSection" class="bottom-nav-item" data-bottom-nav="search">
@@ -315,15 +319,11 @@
     </a>
   </nav>
 
-  <!-- Bottom banner ad — sits above the mobile nav bar -->
-  <div id="adBannerContainer" class="ad-banner-wrapper hidden"
-       role="complementary" aria-label="Advertisement"></div>
-
   <!-- Scripts (load order matters — no bundler) -->
   <script src="js/config.js"></script>
+  <script src="js/vendor/anime.min.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
-  <script src="js/ads.js"></script>
   <script src="js/app.js" defer></script>
 
 </body>

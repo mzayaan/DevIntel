@@ -1,5 +1,5 @@
-const STATIC_CACHE = 'devintel-static-v5';
-const DYNAMIC_CACHE = 'devintel-api-v5';
+const STATIC_CACHE = 'devintel-static-v6';
+const DYNAMIC_CACHE = 'devintel-api-v6';
 const ALL_CACHES = [STATIC_CACHE, DYNAMIC_CACHE];
 
 const urlsToCache = [
@@ -7,6 +7,7 @@ const urlsToCache = [
   '/manifest.json',
   '/css/styles.css',
   '/js/config.js',
+  '/js/vendor/anime.min.js',
   '/js/api.js',
   '/js/ui.js',
   '/js/app.js',

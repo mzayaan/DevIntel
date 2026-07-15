@@ -22,6 +22,23 @@ function isValidURL(str) {
   try { new URL(str); return true; } catch (_) { return false; }
 }
 
+/**
+ * True if the user has requested reduced motion, or if we can't tell.
+ * Guarded so it never throws in environments without matchMedia (e.g. Jest/jsdom).
+ */
+function prefersReducedMotion() {
+  try {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  } catch (_) {
+    return false;
+  }
+}
+
+/** True when the self-hosted anime.js UMD global is loaded. */
+function hasAnime() {
+  return typeof anime === 'function';
+}
+
 function _bookmarkSet() {
   try {
     const list = JSON.parse(localStorage.getItem('devintelBookmarks')) || [];
@@ -145,12 +162,34 @@ function showNotification(message, type) {
 
 /**
  * Stagger card entry — assumes container.innerHTML was just set with .cyber-card children.
+ * Uses anime.js for a spring-like stagger when available; falls back to the plain
+ * CSS `card-in` keyframe (via animation-delay) otherwise, and skips motion entirely
+ * when the user prefers reduced motion.
  */
 function staggerCards(containerId, step) {
   step = step || 50;
   const container = document.getElementById(containerId);
   if (!container) return;
   const cards = container.querySelectorAll('.cyber-card');
+
+  if (prefersReducedMotion()) {
+    cards.forEach(function (c) { c.style.animation = 'none'; c.style.opacity = '1'; });
+    return;
+  }
+
+  if (hasAnime()) {
+    cards.forEach(function (c) { c.style.animation = 'none'; c.style.opacity = '0'; });
+    anime({
+      targets: cards,
+      opacity: [0, 1],
+      translateY: [14, 0],
+      duration: 480,
+      delay: anime.stagger(step),
+      easing: 'cubicBezier(.2,.7,.2,1)',
+    });
+    return;
+  }
+
   cards.forEach(function (c, i) {
     c.style.animationDelay = (i * step) + 'ms';
   });
@@ -191,5 +230,6 @@ if (typeof module !== 'undefined') {
     debounce, escapeHTML, isValidURL, isBookmarked, starSvg,
     showSkeleton, createCard, showError, showEmpty,
     showNotification, updateRefreshTime, staggerCards,
+    prefersReducedMotion, hasAnime,
   };
 }
